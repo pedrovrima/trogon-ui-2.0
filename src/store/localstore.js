@@ -14,6 +14,7 @@ const setLocalStorage = function (key, value) {
     if (firstEntrance === null) {
         Object.keys(basicStructure).map(function (key) {
             localStorage.setItem(key, basicStructure[key])
+            return(null)
         })
     }
 
@@ -32,11 +33,13 @@ const setLocalStorage = function (key, value) {
                 const initialValue = {};
                 return array.reduce((obj, item) => {
                     if (item !== null) {
-                        return {
+                        return ({
 
                             ...obj,
                             [item[key]]: item.value,
-                        };
+                        });
+                    }else{
+                        return(null)
                     }
                 }, initialValue);
             };
@@ -46,7 +49,7 @@ const setLocalStorage = function (key, value) {
                 'key',
             );
 
-            if (newStore != undefined) {
+            if (newStore !== undefined) {
                 localStorage.setItem("registerData", JSON.stringify({ ...newStore }))
                 localStorage.setItem("lastUpdate", new Date())
             } else {

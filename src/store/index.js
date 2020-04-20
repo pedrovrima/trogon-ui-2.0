@@ -1,10 +1,11 @@
 import { createStore } from 'redux';
-import { setLocalStorage } from './localstore.js'
 
 const INITIAL_STATE = {
   initial_data:JSON.parse(localStorage.getItem("registerData")),
   data_stage:0,
   enter_data:{
+    field_invalid:{},
+    form_invalid:1,
       effort:{
           base:{
               date:"",
@@ -30,12 +31,28 @@ function pre_store(state = INITIAL_STATE, action) {
       Object.assign(state,{data_stage:new_stage})
       return(state)
       
-    case 'UPDATE_EFFORT':
+    case 'UPDATE_EFFORT_LEVEL':
               
       Object.assign(state.enter_data.effort, {[action.key]:action.data})
-      break;
-    default:
-      return state;
+      return(state)
+
+      case 'FORM_VALIDATION':
+
+      Object.assign(state.enter_data.field_invalid, {[action.key]:action.data})
+      
+      let n_invalid = Object.keys(state.enter_data.field_invalid).reduce(function (sum, key) {
+        return sum + state.enter_data.field_invalid[key];
+    }, 0)
+  
+    
+
+    let result = n_invalid>0?1:0
+    Object.assign(state.enter_data, {"form_invalid":result})
+
+      return(state)
+        default:
+          return state;
+      
   }
 }
 

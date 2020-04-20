@@ -7,6 +7,7 @@ import DataEntry from './components/data_entry';
 
 function App() {
   return (
+    
     <Provider store={store}>
       <DataEntry />
     </Provider>
