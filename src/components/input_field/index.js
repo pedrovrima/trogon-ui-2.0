@@ -6,50 +6,117 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { useDispatch, useSelector } from 'react-redux';
 import validateDate from 'validate-date'
 import InputMask from 'react-input-mask';
+import Cleave from 'cleave.js/react';
 
-export default function RegularField({ type, options=null, field, upper_level = null, form, title = null, param = null ,...props}) {
+
+
+
+export default function RegularField({ type, options = null, field, upper_level = null, form, title = null, param = null, ...props }) {
     let up_level = useSelector(state => state.enter_data[form])
     let lower_level = useSelector(state => state.enter_data[form][upper_level])
     let invalidValue = useSelector(state => state.enter_data.form_invalid)
 
-    let base = upper_level = null ?
+    let level_up = upper_level === null ?
         up_level : lower_level
-    let value = base[field]
+    let value = level_up[field]
 
     function addCourseAction(data) {
-
-        return { type: 'UPDATE_EFFORT_LEVEL', data: data, key: "base" }
+        
+        return { type: 'UPDATE_EFFORT_LEVEL', data: data, key: upper_level }
     }
+
+
+
 
     const dispatch = useDispatch();
-    let [valid, setValid] = useState(0)
+    let [invalid, setInvalid] = useState(0)
 
-    function setInvalidation (data, key) {
+    function setInvalidation(data, key) {
 
-        return { type: 'FORM_VALIDATION', data: data, key:key }
+        return { type: 'FORM_VALIDATION', data: data, key: key }
     }
-   
+
 
     function handleChange(event, key) {
         let value = event.target.value
-        let new_group = { ...base, [key]: value }
+        let new_group = { ...level_up, [key]: value }
         dispatch(addCourseAction(new_group))
 
 
     }
 
 
-    let checkValid = () => {
-        let aclass = value ===""? 1 : options!==null ?
-         options.indexOf(value) < 0 ?
-            1 : 0 :
-         validateDate(value)
 
 
-            setValid(aclass)
-            dispatch(setInvalidation(aclass, field))
-            
+
+
+
+
+    const createChecker = () => {
+        switch (type) {
+
+            case "val":
+                return ({
+                    check: () => options.indexOf(value) < 0,
+                    message: "Valores permitidos:" + options,
+                    props:{
+
+                    }
+                })
+
+
+            case "date":
+                return ({
+                    check: () => validateDate(value),
+                    message: "Data inválida",
+                    props: {
+                        options:{date: true}
+
+                    }
+                })
+
+
+            case "cont":
+                return ({
+                    check: () => value === "",
+                    message: "No message",
+                    props:{
+
+                    }
+                })
+
+                case "time":
+                    return ({
+                        check: () => value === "",
+                        message: "No message",
+                        props:{
+                            options:{    time: true,
+                                timePattern: ['h', 'm']}
+    
+                        }
+                    })
+    
+        
+        
+            }
+
+
+
     }
+
+    const checker = createChecker()
+    const checkInvalid = () => {
+        let is_invalid = checker.check(value)
+        setInvalid(is_invalid)
+        dispatch(setInvalidation(is_invalid, field))
+        console.log(invalid)
+    }
+
+
+
+
+
+
 
     const createTitle = () => {
         let newT = title === null ?
@@ -63,32 +130,29 @@ export default function RegularField({ type, options=null, field, upper_level = 
 
         )
     }
+
+
+
     return (
         <Form.Group as={Col} >
             {createTitle()}
             <Row>
                 <Form.Control
-                    //   inputProps={{ required: true }}
-                    mask={props.mask}
+                    as = {Cleave}
                     name={field}
-                    id={1}
-                    as={props.as}    
                     value={value}
-                    minLength={2}
-                    isInvalid={valid}
+                    isInvalid={invalid}
                     onChange={(e) => handleChange(e, field)}
-                    onBlur={checkValid}
-                    required
-
+                    onBlur={checkInvalid}
+                    {...checker.props}
+                    {...props}
                 />
 
 
                 <Form.Control.Feedback type="invalid">
                     {value === "" ?
-                        "Obrigatório" : 
-                        options!==null ?
-                        "Opções aceitas:" + options :
-                        title+ " não aceita(o)"}
+                        "Obrigatório" :
+                        checker.message}
                 </Form.Control.Feedback>
 
 

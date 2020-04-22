@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
-
+const init_data = localStorage.getItem("registerData")
 const INITIAL_STATE = {
-  initial_data:JSON.parse(localStorage.getItem("registerData")),
+  initial_data:JSON.parse(init_data),
   data_stage:0,
   enter_data:{
     field_invalid:{},
@@ -11,7 +11,12 @@ const INITIAL_STATE = {
               date:"",
           station:"",
           protocol:""},
-          mistnets:[],
+          mistnets:{
+            total:"",
+            open:"",
+            close:"",
+            nets:[]
+          },
           eff_params:[],
           banders:[],
           summary:{},
@@ -35,6 +40,17 @@ function pre_store(state = INITIAL_STATE, action) {
               
       Object.assign(state.enter_data.effort, {[action.key]:action.data})
       return(state)
+
+
+      case 'LOCAL_STORAGE_DATA':
+              
+        return({...state,enter_data:{...state.enter_data,...action.data}})
+    
+
+        case 'CREATE_NETS':
+              
+        return({...state,enter_data:{...state.enter_data,effort:{...state.enter_data.effort,mistnets:{...state.enter_data.effort.mistnets,nets:[1,2]} }}})
+    
 
       case 'FORM_VALIDATION':
 

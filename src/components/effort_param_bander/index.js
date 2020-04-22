@@ -11,7 +11,6 @@ export default function Effort_Param_Bander() {
 
   let base = useSelector(state => state.data_stage)
   const [labase, setLabase] = useState(base)
-  console.log(base)
   let alabase = JSON.stringify(labase)
   let string_abase = JSON.stringify(base)
 
@@ -20,7 +19,6 @@ export default function Effort_Param_Bander() {
   const dispatch = useDispatch();
   function addCourse() {
     let new_base = { ...base, station: "PORT", protocol: "AES" }
-    console.log(new_base)
     setLabase(new_base)
     dispatch(addCourseAction())
   }
