@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TextField from "../input_field"
-import Cleave from 'cleave.js/react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Effort_Nets() {
 
@@ -32,7 +31,6 @@ export default function Effort_Nets() {
 
   let effort = useSelector(state => state.enter_data.effort)
   let mistnets = useSelector(state => state.enter_data.effort.mistnets)
-  console.log(mistnets)
   let base = useSelector(state => state.enter_data.effort.base)
 
 
@@ -45,7 +43,6 @@ export default function Effort_Nets() {
 
   const netnums = station_mistnets.map((net) => net.net_number)
 
-  console.log(netnums)
   const handleSubmit = (event) => {
     nextEvent()
     const entered_data = JSON.parse(localStorage.getItem("entry_data"))
@@ -57,53 +54,142 @@ export default function Effort_Nets() {
   };
 
 
+  let changeMists = (value, mistArray) => {
+
+
+    const dummyNet = (n) => { return ({ net_number: n, oc: [{ open: mistnets.open, close: mistnets.close }] }) }
+    let i = mistArray.length
+    while (mistArray.length < value) {
+      let netnum = netnums[i]
+      mistArray.push(dummyNet(netnum))
+      i++
+    }
+
+    dispatch({ type: "CREATE_NETS", data: mistArray })
+
+
+  }
+
+
+  let changeTime = (value, mistArray, classy) => {
+    let netss = mistArray.map((net) => {
+      let oc = net.oc.map((oc) => { return ({ ...oc, [classy]: value }) })
+      return ({ ...net, oc })
+    })
+    dispatch({ type: "CREATE_NETS", data: netss })
+
+
+  }
+
+  let total = mistnets.total === "" ? 0 : parseInt(mistnets.total, 10)
+
+  let slicer = mistnets.nets.length - total === 0 ? mistnets.nets.length : mistnets.nets.length - total === mistnets.nets.length ? 0 : total
+
+
   return (
     <Form onSubmit={handleSubmit}>
 
       <Container>
-        <Row>
-          <Form.Group as={Col} controlId="validationCustom02">
+        <Form.Group as={Col} controlId="validationCustom02">
 
-            <div>
-              <TextField type="cont" form="effort" upper_level="mistnets" field="total" title="Total de Redes">
-              </TextField>
-            </div>
+          <Row>
 
+            <Col md={4}>
 
-            <div>
-              <TextField type="time" form="effort" upper_level="mistnets" field="open" title="Hora de Abertura">
-              </TextField>
-
-            </div>
+              <Row>
+                <TextField type="cont" form="effort" changeFunc={(value, mistArray) => changeMists(value, mistArray)} upper_level="mistnets" field="total" title="Total de Redes">
+                </TextField>
+              </Row>
 
 
-            <div>
-              <TextField type="time" form="effort" upper_level="mistnets" field="close" title="Hora de Fechamento">
-              </TextField>
+              <Row>
+                <TextField type="time" form="effort" changeFunc={(value, mistArray, classy = "open") => changeTime(value, mistArray, classy)} upper_level="mistnets" field="open" title="Hora de Início">
+                </TextField>
+              </Row>
+              <Row>
+                <TextField type="time" changeFunc={(value, mistArray, classy = "close") => changeTime(value, mistArray, classy)} form="effort" upper_level="mistnets" field="close" title="Hora de Fim">
+                </TextField>
 
-            </div>
-          </Form.Group>
-          <Form.Group as={Col} controlId="validationCustom02">
-            { 
-            mistnets.nets.map(
-              (net,i)=>{
-                return(
-              <TextField type="time" key={i} form="effort" upper_level="mistnets" field="close" arr={1} title="Hora de Fechamento">
-              </TextField>
-)
+              </Row>
+
+            </Col>
+            <Col md={8}>
+              <Row>
+                <Col md={4}><p>Número da Rede</p></Col>
+                <Col md={8}>
+                  <Row>
+                    <Col><p>Hora de Abertura</p></Col>
+                    <Col><p>Hora de Fechamento</p></Col>
+                    <Col md={2}></Col>
+                  </Row>
+                </Col>
+              </Row>
+              {
+
+                mistnets.nets.slice(0, slicer).map(
+                  (net, i) => {
+
+                    let color = i % 2 === 0 ? "" : "bg-light"
+
+                    return (
+                      <Row className={color}>
+                        <Col md={4}>
+                          <TextField type="cont" key={i} form="effort" onChange={(e) => dispatch({ type: "NET_NUM", data: e.target.value, i: i })} value={net.net_number} upper_level="mistnets" field="close" arr={1} title="">
+                          </TextField>
+                        </Col>
+
+                        <Col md={8}>
+                          {net.oc.map((occ, o) => {
+                            return (
+
+
+                              <Row className="align-items-center" >
+                                <Col>
+                                  <TextField type="time" key={"open" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "open" })} value={net.oc[o].open} upper_level="mistnets" field="open" arr={1} title="">
+                                  </TextField>
+                                </Col>
+                                <Col >
+                                  <TextField type="time" key={"close" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "close" })} value={net.oc[o].close} upper_level="mistnets" field="close" arr={1} title="">
+                                  </TextField>
+                                </Col>
+                                <Col md={2} className={"align-self-center"}>
+                                  {
+                                    o == (net.oc.length - 1) ?
+                                      <>
+                                        <Row>
+                                          <FontAwesomeIcon onClick={() => dispatch({ type: "ADD_HOUR", o: o, i: i })} icon="plus-square" color="green" />
+
+                                        </Row>
+                                        {net.oc.length > 1 ?
+                                          <Row>
+                                            <FontAwesomeIcon onClick={() => dispatch({ type: "REMOVE_HOUR", o: o, i: i })} icon="minus-square" color="red" />
+                                          </Row> : ""
+                                        }
+                                      </> : <Row></Row>
+                                  }
+                                </Col>
+                              </Row>
+
+                            )
+                          })
+                          }
+                        </Col>
+                      </Row>
+
+
+
+                    )
+                  }
+                )
               }
+            </Col>
+          </Row>
 
-            )
-
-
-          }
-          </Form.Group>
+        </Form.Group>
 
 
 
-        </Row>
       </Container>
-<Button onClick={()=>{dispatch({type:"CREATE_NETS",data:1})}}>Add Net</Button>
       <Button
         disabled={invalidValue}
         type="submit"

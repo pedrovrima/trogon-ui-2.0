@@ -4,6 +4,10 @@ import { Provider } from 'react-redux';
 import store from './store';
 import DataEntry from './components/data_entry';
 import setLocalStorage from './store/localstore';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faMinusSquare, faPlusSquare, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+ 
+library.add( faMinusSquare, faPlusSquare, faPlus, faMinus)
 
 
 function App() {

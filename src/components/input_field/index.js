@@ -11,17 +11,15 @@ import Cleave from 'cleave.js/react';
 
 
 
-export default function RegularField({ type, options = null, field, upper_level = null, form, title = null, param = null, ...props }) {
+export default function RegularField({ changeFunc = null, type, options = null, field = null, upper_level = null, form, title = null, param = null, ...props }) {
     let up_level = useSelector(state => state.enter_data[form])
     let lower_level = useSelector(state => state.enter_data[form][upper_level])
     let invalidValue = useSelector(state => state.enter_data.form_invalid)
-
     let level_up = upper_level === null ?
         up_level : lower_level
-    let value = level_up[field]
-
-    function addCourseAction(data) {
-        
+    let value = Object.prototype.hasOwnProperty.call(props, "value") ?
+        props.value : level_up[field]
+    function changeEffortValue(data) {
         return { type: 'UPDATE_EFFORT_LEVEL', data: data, key: upper_level }
     }
 
@@ -37,10 +35,21 @@ export default function RegularField({ type, options = null, field, upper_level 
     }
 
 
+
+
     function handleChange(event, key) {
+
+
         let value = event.target.value
         let new_group = { ...level_up, [key]: value }
-        dispatch(addCourseAction(new_group))
+        dispatch(changeEffortValue(new_group))
+ 
+
+        // ===null? []:upper_level.nets
+        if (changeFunc !== null) {
+            let mistArray = lower_level.nets
+                    changeFunc(value, mistArray)}
+
 
 
     }
@@ -59,7 +68,7 @@ export default function RegularField({ type, options = null, field, upper_level 
                 return ({
                     check: () => options.indexOf(value) < 0,
                     message: "Valores permitidos:" + options,
-                    props:{
+                    props: {
 
                     }
                 })
@@ -70,7 +79,7 @@ export default function RegularField({ type, options = null, field, upper_level 
                     check: () => validateDate(value),
                     message: "Data inválida",
                     props: {
-                        options:{date: true}
+                        options: { date: true }
 
                     }
                 })
@@ -80,25 +89,27 @@ export default function RegularField({ type, options = null, field, upper_level 
                 return ({
                     check: () => value === "",
                     message: "No message",
-                    props:{
+                    props: {
 
                     }
                 })
 
-                case "time":
-                    return ({
-                        check: () => value === "",
-                        message: "No message",
-                        props:{
-                            options:{    time: true,
-                                timePattern: ['h', 'm']}
-    
+            case "time":
+                return ({
+                    check: () => value === "",
+                    message: "No message",
+                    props: {
+                        options: {
+                            time: true,
+                            timePattern: ['h', 'm']
                         }
-                    })
-    
-        
-        
-            }
+
+                    }
+                })
+
+
+
+        }
 
 
 
@@ -109,7 +120,6 @@ export default function RegularField({ type, options = null, field, upper_level 
         let is_invalid = checker.check(value)
         setInvalid(is_invalid)
         dispatch(setInvalidation(is_invalid, field))
-        console.log(invalid)
     }
 
 
@@ -138,7 +148,7 @@ export default function RegularField({ type, options = null, field, upper_level 
             {createTitle()}
             <Row>
                 <Form.Control
-                    as = {Cleave}
+                    as={Cleave}
                     name={field}
                     value={value}
                     isInvalid={invalid}

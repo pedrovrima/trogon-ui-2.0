@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import TextField from "../input_field"
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 function addCourseAction() {
   return { type: 'CHANGE_STAGE', data: 1, key: "base" }
@@ -7,36 +15,184 @@ function addCourseAction() {
 
 export default function Effort_Param_Bander() {
 
+  let effort = useSelector(state => state.enter_data.effort)
+
+  let banders = useSelector(state => state.initial_data.banders)
+  
+  let effort_time = useSelector(state => state.initial_data.effort_time)
+  let effort_param = useSelector(state => state.initial_data.effort_variables)
+  let invalidValue = useSelector(state => state.enter_data.form_invalid)
 
 
-  let base = useSelector(state => state.data_stage)
-  const [labase, setLabase] = useState(base)
-  let alabase = JSON.stringify(labase)
-  let string_abase = JSON.stringify(base)
-
-
-
+  let entered_banders = useSelector(state => state.enter_data.effort.banders)
+  let entered_effort_param = useSelector(state => state.enter_data.effort.eff_params)
   const dispatch = useDispatch();
-  function addCourse() {
-    let new_base = { ...base, station: "PORT", protocol: "AES" }
-    setLabase(new_base)
-    dispatch(addCourseAction())
+  function nextEvent() {
+    dispatch(addCourseAction(1))
   }
 
+  const handleSubmit = (event) => {
+    nextEvent()
+    const entered_data = JSON.parse(localStorage.getItem("entry_data"))
+    let newdata = JSON.stringify({ ...entered_data, effort })
+    localStorage.setItem("entry_data", newdata)
+
+    event.preventDefault();
+
+  };
 
 
+  useEffect(() => {
+
+    if (entered_effort_param.length === 0) {
+
+      let init_eff_param = effort_param.map((param) => {
+        let par_obj = { name: param.name, vals: [] }
+
+        effort_time.map((time) => {
+          par_obj.vals[time.effort_time_id] = ""
+        })
+
+        return(par_obj)
+      })
+
+
+      dispatch({ type: "NEW_EFFORT_PARAM", data: init_eff_param })
+
+    }
+  }, [])
 
   return (
-    <>
-      <div>
-        {alabase}
-      </div>
-      <div>
-        {string_abase}
-      </div>
- 
+    <Form onSubmit={handleSubmit}>
+
+    <Container>
+      <Row>
+        <Col>
+          <h2>
+            Anilhadores
+        </h2>
+          {
+            entered_banders.map(function (bander, i) {
 
 
-    </>
+
+
+              let bander_data = banders.filter((value) => value.code === bander)
+
+              return (
+
+                <Row>
+                  <Col>
+                    <TextField type="val" onChange={(e) => dispatch({ type: "BANDER_VALUE", i: i, data: e.target.value })} options={banders.map((bnd)=>bnd.code)} form="effort" value={bander} field="banders" title="">
+                    </TextField>
+                  </Col>
+                  <Col>
+                    <p>{bander_data.length > 0 ? bander_data[0].name : null}</p>
+
+                  </Col>
+                </Row>
+              )
+            }
+            )
+          }
+          <Row>
+            <Col>
+              <FontAwesomeIcon onClick={() => dispatch({ type: "UPDATE_EFFORT_LEVEL", key: "banders", data: [...entered_banders, ""] })} icon="plus" color="green" />
+            </Col>
+            <Col>
+              {entered_banders.length > 1 ?
+                <FontAwesomeIcon onClick={() => dispatch({ type: "REMOVE_BANDER" })} icon="minus" color="red" />
+                : null
+
+              }
+            </Col>
+          </Row>
+
+        </Col>
+        <Col>
+          <h2>Parâmetros</h2>
+          <Row>
+            <Col md={4}></Col>
+            {
+
+              effort_time.map((time) => {
+                return (
+                  <>
+                    <Col md={2}>
+                      {time.portuguese_label}
+                    </Col>
+                  </>
+                )
+              }
+
+              )
+
+
+
+
+            }
+
+          </Row>
+
+          {entered_effort_param.length===0?<p>loading</p>:
+            effort_param.map((par,i) => {
+              console.log(par)
+              return (
+                <Row>
+                  <Col md={4}>
+                    {par.portuguese_label}
+                  </Col>
+                  { 
+                    effort_time.map((time) => {
+                      let this_value=()=>{
+                        return(entered_effort_param.filter((param)=>param.name===par.name)[0].vals[time.effort_time_id])
+                      }
+
+                      return (
+                        <>
+                          <Col md={2}>
+                     <TextField type={par.type} 
+                     options={par.eff_options.map((opt)=>opt.value_oama)}
+                      onChange={(e) => dispatch({ type: "EFFORT_PARAM", par: par.name, i:i, time:time.effort_time_id, data: e.target.value })} 
+                     form="effort" 
+                     value={this_value()}  
+                     field="effort_param" 
+                     title=""> 
+                     </TextField> 
+                          </Col> 
+                        </>
+                      )
+                    }
+
+                    )
+
+
+
+
+                  }
+
+                </Row>
+
+
+              )
+
+            })
+
+
+          }
+
+
+
+        </Col>
+      </Row>
+      <Row>
+      <Button
+        disabled={invalidValue}
+        type="submit"
+      >Submit form</Button>
+
+      </Row>
+    </Container>
+</Form>
   );
 }

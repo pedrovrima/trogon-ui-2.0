@@ -43,7 +43,6 @@ export default function Effort_Base() {
   const protocolGetter = (entered_protocol) => {
     const protocol_data = base_field.protocols.filter((prot) => {
       let is_it = prot.protocol_code === entered_protocol
-      console.log(is_it)
     }
     )
   }
