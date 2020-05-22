@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { NavigationButtons } from '../functions'
 
 export default function Effort_Nets() {
 
@@ -44,7 +45,7 @@ export default function Effort_Nets() {
   const netnums = station_mistnets.map((net) => net.net_number)
 
   const handleSubmit = (event) => {
-    nextEvent()
+    dispatch({ type: "CHANGE_STAGE", data: 1 })
     const entered_data = JSON.parse(localStorage.getItem("entry_data"))
     let newdata = JSON.stringify({ ...entered_data, effort })
     localStorage.setItem("entry_data", newdata)
@@ -87,115 +88,121 @@ export default function Effort_Nets() {
 
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Container >
+      <Form onSubmit={handleSubmit}>
 
-      <Container>
-        <Form.Group as={Col} controlId="validationCustom02">
+        <Row className="align-items-center" >
 
-          <Row>
 
-            <Col md={4}>
+          <Col className="border-right" md={4}>
 
-              <Row>
-                <TextField type="cont" form="effort" changeFunc={(value, mistArray) => changeMists(value, mistArray)} upper_level="mistnets" field="total" title="Total de Redes">
+            <Row>
+              <Col className="col-auto">
+                <TextField type="cont" unit="nets"   user_options={netnums.length} value={mistnets.total} form="effort"  changeFunc={(value, mistArray) => changeMists(value, mistArray)} upper_level="mistnets" name="total" title="Total de Redes">
                 </TextField>
-              </Row>
+              </Col>
+            </Row>
 
 
-              <Row>
-                <TextField type="time" form="effort" changeFunc={(value, mistArray, classy = "open") => changeTime(value, mistArray, classy)} upper_level="mistnets" field="open" title="Hora de Início">
+            <Row>
+              <Col className="col-auto">
+                <TextField type="time" value={mistnets.open} form="effort" changeFunc={(value, mistArray, classy = "open") => changeTime(value, mistArray, classy)} upper_level="mistnets" name="open" title="Hora de Início">
                 </TextField>
-              </Row>
-              <Row>
-                <TextField type="time" changeFunc={(value, mistArray, classy = "close") => changeTime(value, mistArray, classy)} form="effort" upper_level="mistnets" field="close" title="Hora de Fim">
+              </Col>
+            </Row>
+            <Row>
+              <Col className="col-auto">
+                <TextField type="time" value={mistnets.close} changeFunc={(value, mistArray, classy = "close") => changeTime(value, mistArray, classy)} form="effort" upper_level="mistnets" name="close" title="Hora de Fim">
                 </TextField>
+              </Col>
+            </Row>
 
-              </Row>
+          </Col>
+          <Col  >
+            <Row className="border" style={{ minHeight: 0 }} >
+              <Col >
+                <Row className="mt-2 mb-3">
+                  <Col md={4}><h5>Número da Rede</h5></Col>
+                  <Col md={8}>
+                    <Row >
+                      <Col><h5>Abertura</h5></Col>
+                      <Col><h5>Fechamento</h5></Col>
+                      <Col md={2}></Col>
+                    </Row>
+                  </Col>
+                </Row>
+                <Container className="mb-5" style={{ overflowY: "scroll", maxHeight: "30vh" }}>
 
-            </Col>
-            <Col md={8}>
-              <Row>
-                <Col md={4}><p>Número da Rede</p></Col>
-                <Col md={8}>
-                  <Row>
-                    <Col><p>Hora de Abertura</p></Col>
-                    <Col><p>Hora de Fechamento</p></Col>
-                    <Col md={2}></Col>
-                  </Row>
-                </Col>
-              </Row>
-              {
+                  {
 
-                mistnets.nets.slice(0, slicer).map(
-                  (net, i) => {
+                    mistnets.nets.slice(0, slicer).map(
+                      (net, i) => {
 
-                    let color = i % 2 === 0 ? "" : "bg-light"
+                        let color = i % 2 === 0 ? "" : "bg-light"
 
-                    return (
-                      <Row className={color}>
-                        <Col md={4}>
-                          <TextField type="cont" key={i} form="effort" onChange={(e) => dispatch({ type: "NET_NUM", data: e.target.value, i: i })} value={net.net_number} upper_level="mistnets" field="close" arr={1} title="">
-                          </TextField>
-                        </Col>
+                        return (
+                          <Row className={color}>
+                            <Col md={4}>
+                              <TextField type="cont" key={i} form="effort" onChange={(e) => dispatch({ type: "NET_NUM", data: e.target.value, i: i })} value={net.net_number} upper_level="mistnets" name="close" arr={1} title="">
+                              </TextField>
+                            </Col>
 
-                        <Col md={8}>
-                          {net.oc.map((occ, o) => {
-                            return (
-
-
-                              <Row className="align-items-center" >
-                                <Col>
-                                  <TextField type="time" key={"open" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "open" })} value={net.oc[o].open} upper_level="mistnets" field="open" arr={1} title="">
-                                  </TextField>
-                                </Col>
-                                <Col >
-                                  <TextField type="time" key={"close" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "close" })} value={net.oc[o].close} upper_level="mistnets" field="close" arr={1} title="">
-                                  </TextField>
-                                </Col>
-                                <Col md={2} className={"align-self-center"}>
-                                  {
-                                    o == (net.oc.length - 1) ?
-                                      <>
-                                        <Row>
-                                          <FontAwesomeIcon onClick={() => dispatch({ type: "ADD_HOUR", o: o, i: i })} icon="plus-square" color="green" />
-
-                                        </Row>
-                                        {net.oc.length > 1 ?
-                                          <Row>
-                                            <FontAwesomeIcon onClick={() => dispatch({ type: "REMOVE_HOUR", o: o, i: i })} icon="minus-square" color="red" />
-                                          </Row> : ""
-                                        }
-                                      </> : <Row></Row>
-                                  }
-                                </Col>
-                              </Row>
-
-                            )
-                          })
-                          }
-                        </Col>
-                      </Row>
+                            <Col md={8}>
+                              {net.oc.map((occ, o) => {
+                                return (
 
 
+                                  <Row className="align-items-center" >
+                                    <Col>
+                                      <TextField type="time" key={"open" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "open" })} value={net.oc[o].open} upper_level="mistnets" name="open" arr={1} title="">
+                                      </TextField>
+                                    </Col>
+                                    <Col >
+                                      <TextField type="time" key={"close" + i + o} form="effort" onChange={(e) => dispatch({ type: "NET_TIME", data: e.target.value, i: i, o: o, oc: "close" })} value={net.oc[o].close} upper_level="mistnets" name="close" arr={1} title="">
+                                      </TextField>
+                                    </Col>
+                                    <Col md={2} className={"align-self-center"}>
+                                      {
+                                        o == (net.oc.length - 1) ?
+                                          <>
+                                            <Row>
+                                              <Col>
+                                                <FontAwesomeIcon onClick={() => dispatch({ type: "ADD_HOUR", o: o, i: i })} icon="plus-square" color="green" />
+                                              </Col>
+                                            </Row>
+                                            {net.oc.length > 1 ?
+                                              <Row>
+                                                <Col>
+                                                  <FontAwesomeIcon onClick={() => dispatch({ type: "REMOVE_HOUR", o: o, i: i })} icon="minus-square" color="red" />
+                                                </Col>
+                                              </Row> : ""
+                                            }
+                                          </> : <Row></Row>
+                                      }
+                                    </Col>
+                                  </Row>
 
+                                )
+                              })
+                              }
+                            </Col>
+                          </Row>
+
+
+
+                        )
+                      }
                     )
                   }
-                )
-              }
-            </Col>
-          </Row>
+                </Container>
 
-        </Form.Group>
+              </Col>
+            </Row>
 
-
-
-      </Container>
-      <Button
-        disabled={invalidValue}
-        type="submit"
-      >Submit form</Button>
-
-    </Form>
-
+          </Col>
+        </Row>
+        <NavigationButtons />
+      </Form >
+    </Container>
   );
 }

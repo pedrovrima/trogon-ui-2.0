@@ -1,7 +1,10 @@
 import { createStore } from 'redux';
-const init_data = localStorage.getItem("registerData")
 const INITIAL_STATE = {
-  initial_data: JSON.parse(init_data),
+  entry_stage: "capture",
+  initial_data: {},
+  loaded: 0,
+  capture_index: 0,
+  capture_stage: 0,
   data_stage: 0,
   enter_data: {
     field_invalid: {},
@@ -20,10 +23,10 @@ const INITIAL_STATE = {
       },
       eff_params: [],
       banders: [""],
-      summary: {},
-      notes: []
+      summary: { new: NaN, recapture: NaN, unbanded: NaN },
+      notes: ""
     },
-    capture: []
+    captures: []
   }
 
 };
@@ -36,11 +39,33 @@ function pre_store(state = INITIAL_STATE, action) {
   let banders = []
 
   switch (action.type) {
+
+    case 'UPDATE_CAPTURE_VALUE':
+      let new_captures=state.enter_data.captures
+      new_captures[action.index]=action.data
+      new_state = {...state,enter_data:{...state.enter_data,captures:new_captures}}
+      return (new_state)
+
+
+    case 'ADD_CAPTURE':
+
+      new_state = state.enter_data.captures.push(action.data)
+      return (state)
     case 'CHANGE_STAGE':
-      let new_stage = state.data_stage + action.data
+      let new_stage
+      action.data == 0 ?
+        new_stage = action.data :
+        new_stage = state.data_stage + action.data
       Object.assign(state, { data_stage: new_stage })
       return (state)
 
+    case "LOADER":
+      new_state = { ...state, loaded: action.data }
+      return (new_state)
+
+    case 'LOCAL_SETTER':
+      new_state = { ...state, initial_data: action.data }
+      return (new_state)
     case 'NET_NUM':
       nets = state.enter_data.effort.mistnets.nets
       nets[action.i].net_number = action.data
@@ -127,7 +152,7 @@ function pre_store(state = INITIAL_STATE, action) {
 
     case 'LOCAL_STORAGE_DATA':
 
-      return ({ ...state, enter_data: { ...state.enter_data, ...action.data } })
+      return ({ ...state, loaded: 1, enter_data: { ...state.enter_data, ...action.data } })
 
 
     case 'CREATE_NETS':
@@ -139,15 +164,18 @@ function pre_store(state = INITIAL_STATE, action) {
 
       return ({ ...state, enter_data: { ...state.enter_data, effort: { ...state.enter_data.effort, eff_params: action.data } } })
 
+    case "CAHNGE_CAPTURE_INDEX":
+
+      new_state = { ...state, capture_index:action.data }
+      return (new_state);
 
 
+    case 'EFFORT_PARAM':
+      let eff_params = state.enter_data.effort.eff_params
+      eff_params[action.i].vals[action.time] = action.data
 
-      case 'EFFORT_PARAM':
-        let eff_params = state.enter_data.effort.eff_params
-        eff_params[action.i].vals[action.time]=action.data        
+      return ({ ...state, enter_data: { ...state.enter_data, effort: { ...state.enter_data.effort, eff_params: eff_params } } })
 
-        return ({ ...state, enter_data: { ...state.enter_data, effort: { ...state.enter_data.effort, eff_params: eff_params } } })
-  
 
     case 'FORM_VALIDATION':
 
@@ -163,6 +191,11 @@ function pre_store(state = INITIAL_STATE, action) {
       Object.assign(state.enter_data, { "form_invalid": result })
 
       return (state)
+
+    case 'CHANGE_ENTRY':
+
+      return ({ ...state, entry_stage: action.data })
+
     default:
       return state;
 
