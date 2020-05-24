@@ -184,7 +184,7 @@ export default function Effort_Param_Bander() {
 
           </Col>
         </Row>
-        <NavigationButtons />
+        <NavigationButtons handleSub={handleSubmit}/>
 
       </Form>
 

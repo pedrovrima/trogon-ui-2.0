@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 
-export function NavigationButtons() {
+export function NavigationButtons(handleSub) {
 
     const effort_stage = useSelector(state => state.data_stage)
     const entry_stage = useSelector(state=>state.entry_stage)
@@ -31,6 +31,7 @@ export function NavigationButtons() {
                     <Button
                         color="blue"
                         onClick={() => {
+                            handleSub()
                             effort_stage < 3?
                         dispatch({ type: "CHANGE_STAGE", data: 1 }):
                         dispatch(

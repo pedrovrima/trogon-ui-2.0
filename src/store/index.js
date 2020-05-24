@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   initial_data: {},
   loaded: 0,
   capture_index: 0,
-  capture_stage: 0,
+  capture_stage: 1,
   data_stage: 0,
   enter_data: {
     field_invalid: {},

@@ -201,7 +201,7 @@ export default function Effort_Nets() {
 
           </Col>
         </Row>
-        <NavigationButtons />
+        <NavigationButtons handleSub={handleSubmit}/>
       </Form >
     </Container>
   );

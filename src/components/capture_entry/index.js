@@ -5,17 +5,17 @@ import CaptureVals from "../capture_vals"
 
 
 export default function CaptureEntry(capture_index) {
-    let [capture_stage, setCaptureStage] = useState(0)
-
+    let [capture_stage, setCaptureStage] = useState(1)
+console.log(capture_stage)
 
     return (
 
         <>
             
             {
-                capture_stage==0?
+                capture_stage===0?
                 <CaptureInit ></CaptureInit>:
-                capture_stage==1?
+                capture_stage===1?
                 <CaptureVals></CaptureVals> :
                 null
             }

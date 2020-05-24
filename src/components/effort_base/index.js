@@ -24,7 +24,7 @@ export default function Effort_Base() {
 
   const handleSubmit = (event) => {
     dispatch({ type: "CHANGE_STAGE", data: 1 })
-
+    console.log("submitting")
     const entered_data = JSON.parse(localStorage.getItem("entry_data"))
     let newdata = JSON.stringify({ ...entered_data, effort })
     localStorage.setItem("entry_data", newdata)
@@ -76,7 +76,7 @@ export default function Effort_Base() {
             </TextField>
           </div>
         </Row>
-        <NavigationButtons />
+        <NavigationButtons handleSub={handleSubmit}/>
       </Form>
     </Container>
   );
