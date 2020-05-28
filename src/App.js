@@ -25,7 +25,6 @@ function App() {
             <NavBar />
             <div className="container-fluid container-all">
           <div className="row align-items-center ml-4 mr-4 h-100 justify-content-center">
-
             <DataEntry />
           </div>
         </div>

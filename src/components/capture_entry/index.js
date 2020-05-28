@@ -5,7 +5,7 @@ import CaptureVals from "../capture_vals"
 
 
 export default function CaptureEntry(capture_index) {
-    let [capture_stage, setCaptureStage] = useState(1)
+    let [capture_stage, setCaptureStage] = useState(0)
 console.log(capture_stage)
 
     return (

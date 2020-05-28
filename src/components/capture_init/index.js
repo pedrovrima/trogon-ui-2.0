@@ -17,9 +17,16 @@ export default function CaptureInit() {
     state.initial_data.bands.map((string) => string.size).filter(onlyUnique)
   );
 
-  let band_options = useSelector((state) => state.initial_data.bands.bands);
-  console.log(band_options);
-  let capture_codes = acc_code
+  let filter_band = (bandi)=>capture_values.capture_code==="R"?bandi.used:!bandi.used 
+
+  let band_options = useSelector((state) => state.initial_data.bands)
+    .filter((band) => band.size === capture_values.band_size)
+    .map((band) => band.bands.filter(filter_band).map((bandi)=>bandi.band_number).sort((a, b)=>a-b)[0])
+    
+    
+    console.log(band_options)
+ 
+     let capture_codes = acc_code
     .filter((value) => value.name === "band_code")[0]
     .options.map((vals) => vals.value_oama);
 
@@ -31,10 +38,10 @@ export default function CaptureInit() {
       sci_name: spp.genus + " " + spp.species,
     };
   });
-  let [species_entered, setEntered] = useState(() => {
+  let [species_entered, setSppEntered] = useState(() => {
     if (capture_values.spp_id !== "") {
       let species_info = species_table
-        .filter((spp) => spp.spp_id == capture_values.spp_id)
+        .filter((spp) => spp.spp_id === capture_values.spp_id)
         .map((spp) => {
           return {
             id: spp.spp_id,
@@ -48,6 +55,8 @@ export default function CaptureInit() {
     }
   });
 
+  let [band_entered, setBandEntered] = useState([capture_values.band_number])
+
   const onChangeCap = (e, name) => {
     let new_cap = { ...capture_values, [name]: e.target.value };
 
@@ -59,7 +68,7 @@ export default function CaptureInit() {
   };
 
   const onChangeSpp = (value) => {
-    setEntered(value);
+    setSppEntered(value);
 
     let new_value = value[0] ? value[0].id : "";
 
@@ -71,6 +80,22 @@ export default function CaptureInit() {
       index: capture_index,
     });
   };
+
+  const onChangeBand = (value) => {
+    setBandEntered(value);
+
+    let new_value = value[0] ? value[0] : "";
+
+    let new_cap = { ...capture_values, band_number: new_value };
+
+    dispatch({
+      type: "UPDATE_CAPTURE_VALUE",
+      data: new_cap,
+      index: capture_index,
+    });
+  };
+
+
 
   const handleSubmit = (event) => {
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
@@ -156,10 +181,10 @@ export default function CaptureInit() {
             <TextField
               type="band_number"
               options={band_options}
-              onChange={(e) => onChangeCap(e, "band_size")}
-              value={capture_values.band_size}
+              onChange={(e,value) => onChangeBand(e, value)}
+              selected={band_entered}
+              value={band_entered}
               form="captures"
-              upper_level="base"
               name="band_number"
               title="Número da Anilha"
             ></TextField>
