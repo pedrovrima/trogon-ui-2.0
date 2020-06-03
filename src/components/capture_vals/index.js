@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
-import { onlyUnique } from "../functions";
-import { Typeahead } from "react-bootstrap-typeahead"; // ES2015
 
 export default function CaptureVals() {
   let dispatch = useDispatch();
@@ -65,7 +63,7 @@ export default function CaptureVals() {
           {mandatory_variables.map((variable) => {
             let this_value = () => {
               return this_capture_values.variables.filter((param) => {
-                return param.name == variable.name;
+                return param.name === variable.name;
               })[0].a_value;
             };
 

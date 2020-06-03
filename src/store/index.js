@@ -52,7 +52,7 @@ function pre_store(state = INITIAL_STATE, action) {
       return state;
     case "CHANGE_STAGE":
       let new_stage;
-      action.data == 0
+      action.data === 0
         ? (new_stage = action.data)
         : (new_stage = state.data_stage + action.data);
       Object.assign(state, { data_stage: new_stage });
@@ -60,7 +60,7 @@ function pre_store(state = INITIAL_STATE, action) {
 
     case "CHANGE_CAPTURE_STAGE":
       let cap_stage;
-      action.data == 0
+      action.data === 0
         ? (cap_stage = action.data)
         : (cap_stage = state.capture_stage + action.data);
       Object.assign(state, { capture_stage: cap_stage });

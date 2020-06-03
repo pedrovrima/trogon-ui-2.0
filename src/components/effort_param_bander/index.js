@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "../input_field";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import div  from "react-bootstrap/div ";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +21,6 @@ export default function Effort_Param_Bander() {
   let effort_param = useSelector(
     (state) => state.initial_data.effort_variables
   );
-  let invalidValue = useSelector((state) => state.enter_data.form_invalid);
 
   let entered_banders = useSelector((state) => state.enter_data.effort.banders);
   let entered_effort_param = useSelector(
@@ -54,6 +52,7 @@ export default function Effort_Param_Bander() {
 
         effort_time.map((time) => {
           par_obj.vals[time.effort_time_id] = "";
+          return null; 
         });
 
         return par_obj;
@@ -64,7 +63,7 @@ export default function Effort_Param_Bander() {
   }, []);
 
   return (
-    <Container>
+    <div >
       <Form onSubmit={handleSubmit} className="h-100">
         <Row className="align-items-center">
           <Col className="border-right">
@@ -182,6 +181,6 @@ export default function Effort_Param_Bander() {
         </Row>
         <NavigationButtons handleSub={handleSubmit} />
       </Form>
-    </Container>
+    </div >
   );
 }

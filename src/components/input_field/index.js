@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import validateDate from "validate-date";
 import Cleave from "cleave.js/react";
 import { NameCreator } from "../functions";
