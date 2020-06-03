@@ -55,18 +55,20 @@ export function NameCreator(title = "", unit = null) {
         case "gr":
           return " (gr)";
         case "mm":
-          return "mm";
+          return "(mm)";
         default:
           return "";
       }
     };
-    return <h5>{title + getUnitText(unit)}</h5>;
+    return <h6>{title + getUnitText(unit)}</h6>;
   } else {
     return "";
   }
 }
 
-export function createCapture() {
+export function createCapture(protocol_variables) {
+  
+  let cap_vars=protocol_variables.map((variable)=> {return({name:variable.name,a_value:""})})
   return {
     capture_time: "",
     net_number: "",
@@ -78,7 +80,7 @@ export function createCapture() {
 
     note: "",
     spp_id: "",
-    variables: [],
+    variables: cap_vars,
   };
 }
 
