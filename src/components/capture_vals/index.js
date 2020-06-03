@@ -9,12 +9,18 @@ export default function CaptureVals() {
   let capture_index = useSelector((state) => state.capture_index);
   let all_capture_values = useSelector((state) => state.enter_data.captures);
 
-  let capture_values = all_capture_values[capture_index];
+  let capture_values = useSelector((state) => state.enter_data.captures);
+
+  let this_capture_values = capture_values[capture_index];
   let effort_values = useSelector((state) => state.enter_data.effort);
   let user_protocols = useSelector((state) => state.initial_data.protocols);
   let capture_variables = useSelector(
     (state) => state.initial_data.capture_variables
   );
+
+  useEffect(() => {
+    console.log(capture_values);
+  }, [capture_values]);
 
   let this_protocol = effort_values.base.protocol;
 
@@ -29,14 +35,12 @@ export default function CaptureVals() {
     (variable) =>
       mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
   );
-  let optional_variables = capture_variables.filter(
-    (variable) =>
-      mandatory_variables_id.indexOf(variable.capture_variable_id) < 0
-  );
 
   const onChangeCap = (e, name) => {
-    let new_cap = { ...capture_values, [name]: e.target.value };
-
+    let new_cap = this_capture_values;
+    let var_names = new_cap.variables.map((variable) => variable.name);
+    let var_index = var_names.indexOf(name);
+    new_cap.variables[var_index].a_value = e.target.value;
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
       data: new_cap,
@@ -57,27 +61,30 @@ export default function CaptureVals() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {/* {mandatory_variables.map((variable) => {
-          let this_value = () => {
-            return entered_effort_param.filter(
-              (param) => param.name === par.name
-            )[0].vals[time.effort_time_id];
-          };
+        <div className="row">
+          {mandatory_variables.map((variable) => {
+            let this_value = () => {
+              return this_capture_values.variables.filter((param) => {
+                return param.name == variable.name;
+              })[0].a_value;
+            };
 
-          return (
-            <>
-              <div className="col" md={2}>
-                <TextField
-                  onChange={(e) => onChangeCap(variable)}
-                  form="effort"
-                  value={this_value()}
-                  variable={par}
-                  title=""
-                ></TextField>
-              </div>
-            </>
-          );
-        })} */}
+            return (
+              <>
+                <div className="col-3">
+                  <TextField
+                    type={variable.type}
+                    onChange={(e) => onChangeCap(e, variable.name)}
+                    value={this_value()}
+                    title={variable.portuguese_label}
+                    protocol_options={variable.options}
+                    unit={variable.unit}
+                  ></TextField>
+                </div>
+              </>
+            );
+          })}
+        </div>
       </form>
     </>
   );

@@ -5,7 +5,6 @@ import Row from "react-bootstrap/Row";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { useDispatch, useSelector } from "react-redux";
 import validateDate from "validate-date";
-import InputMask from "react-input-mask";
 import Cleave from "cleave.js/react";
 import { NameCreator } from "../functions";
 
@@ -22,33 +21,17 @@ export default function RegularField({
   title = null,
   value = null,
   param = null,
+protocol_options = null,
+
   ...props
 }) {
   let new_options = [];
+  
+  if(protocol_options){
+    new_options.push(protocol_options.map((opt) => opt.value_oama));
 
-  if (
-    type === null &&
-    user_options === null &&
-    name === null &&
-    variable !== null
-  ) {
-    if (Object.keys(variable).indexOf("eff_options") > -1) {
-      ({ type, unit, name } = variable);
-      new_options.push(variable.eff_options.map((opt) => opt.value_oama));
-    } else {
-      ({ type, options, unit, name } = variable);
-      new_options.push(options.map((opt) => opt.value_oama));
-    }
-  } else {
+  } else if(user_options) {
     new_options.push(user_options);
-  }
-
-  let up_level = useSelector((state) => state.enter_data[form]);
-  let lower_level = useSelector((state) => state.enter_data[form][upper_level]);
-  let invalidValue = useSelector((state) => state.enter_data.form_invalid);
-  let level_up = upper_level === null ? up_level : lower_level;
-  function changeEffortValue(data) {
-    return { type: "UPDATE_EFFORT_LEVEL", data: data, key: upper_level };
   }
 
   useEffect(() => {
@@ -62,18 +45,8 @@ export default function RegularField({
   function setInvalidation(data, key) {
     return { type: "FORM_VALIDATION", data: data, key: key };
   }
+console.log(value)
 
-  function handleChange(event, key) {
-    let value = event.target.value;
-    let new_group = { ...level_up, [key]: value };
-    dispatch(changeEffortValue(new_group));
-
-    // ===null? []:upper_level.nets
-    if (changeFunc !== null) {
-      let mistArray = lower_level.nets;
-      changeFunc(value, mistArray);
-    }
-  }
 
   const createTitle = (title, unit) => {
     let newT = NameCreator(title, unit);
@@ -94,7 +67,6 @@ export default function RegularField({
         };
 
       case "nets":
-        console.log(user_options);
         return {
           check: () => value > user_options,
           message:
@@ -104,11 +76,11 @@ export default function RegularField({
 
       default:
         return {
-          check: () => value === 0,
+          check: () => value === "",
           message: "Valores devem estar entre 0 e 100",
           props: {},
-        };
-    }
+        }
+      };
   };
 
   const createChecker = () => {
@@ -184,14 +156,12 @@ export default function RegularField({
   };
 
   const checker = createChecker();
-
   const checkInvalid = (value) => {
     let is_invalid = checker.check(value);
     setInvalid(is_invalid);
     dispatch(setInvalidation(is_invalid, name));
   };
 
-  console.log(options)
   return (
     <Form.Group as={Col}>
       {createTitle(title, unit)}
@@ -203,7 +173,6 @@ export default function RegularField({
             name={name}
             value={value}
             isInvalid={invalid}
-            onChange={(e) => handleChange(e, name)}
             onBlur={checkInvalid}
             onFocus={() => setInvalid(0)}
             {...checker.props}
@@ -214,7 +183,6 @@ export default function RegularField({
             name={name}
             value={value}
             isInvalid={invalid}
-            onChange={(e) => handleChange(e, name)}
             onBlur={checkInvalid}
             onFocus={() => setInvalid(0)}
             {...checker.props}
