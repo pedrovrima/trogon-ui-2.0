@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useSelector, useDispatch } from "react-redux";
 import validateDate from "validate-date";
+import TextField from "./input_field"
+
 
 export function NavigationButtons(handleSub = () => null) {
   const effort_stage = useSelector((state) => state.data_stage);
@@ -22,6 +24,7 @@ export function NavigationButtons(handleSub = () => null) {
             }}
             disabled={invalidValue || effort_stage === 0}
           >
+            
             Anterior
           </Button>
         </Col>
@@ -71,6 +74,16 @@ export function createCapture(protocol_variables) {
   let cap_vars = protocol_variables.map((variable) => {
     return { name: variable.name, a_value: "" };
   });
+
+  let ageSex = [{name:"age_wrp",a_value:""},
+  {name:"age_criteria",a_value:""},
+  {name:"sex",a_value:""},
+  {name:"sex_criteria",a_value:""}
+  ]
+
+  
+  ageSex.map((avar)=> cap_vars.push(avar))
+
   return {
     capture_time: "",
     net_number: "",
@@ -89,6 +102,7 @@ export function createCapture(protocol_variables) {
 export function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+
 
 export function createChecker(
   unit,
@@ -203,4 +217,21 @@ export function createChecker(
     default:
       break;
   }
+}
+
+
+export function  VarField (...props){
+
+  let a_props=props[0]
+  return(
+    <TextField
+    type={a_props.variable.type}
+    onChange={(e) => a_props.onChangeFunc(e, a_props.variable.name)}
+    value={a_props.value}
+    title={a_props.variable.portuguese_label}
+    protocol_options={a_props.variable.options}
+    unit={a_props.variable.unit}
+    duplicable={a_props.variable.duplicable}
+  ></TextField>
+  )
 }
