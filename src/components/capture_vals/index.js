@@ -16,10 +16,6 @@ export default function CaptureVals() {
     (state) => state.initial_data.capture_variables
   );
 
-  useEffect(() => {
-    console.log(capture_values);
-  }, [capture_values]);
-
   let this_protocol = effort_values.base.protocol;
 
   let protocol_variables = user_protocols.filter(
@@ -77,6 +73,7 @@ export default function CaptureVals() {
                     title={variable.portuguese_label}
                     protocol_options={variable.options}
                     unit={variable.unit}
+                    duplicable={variable.duplicable}
                   ></TextField>
                 </div>
               </>
