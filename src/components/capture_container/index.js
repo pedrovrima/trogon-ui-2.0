@@ -93,7 +93,7 @@ export default function CaptureContainer(capture_data = null) {
                         setCaptureIndex(capture_index - 1);
                         setCaptureIndexField(capture_index);
                       }}
-                      tabindex="-1"
+                      tabIndex="-1"
                     >
                       <span>&#60;</span>
                     </button>
@@ -112,7 +112,7 @@ export default function CaptureContainer(capture_data = null) {
                           style={{ width: "3rem" }}
                           href="#"
                         ></input>
-                        <div class="invalid-tooltip ">{message}</div>
+                        <div className="invalid-tooltip ">{message}</div>
                       </li>
                     </form>
                   </div>
