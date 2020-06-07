@@ -215,6 +215,9 @@ export function createChecker(
         check: () => null,
       };
     default:
+      return{
+        check:()=> null
+      }
       break;
   }
 }
