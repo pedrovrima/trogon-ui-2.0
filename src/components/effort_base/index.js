@@ -17,7 +17,6 @@ export default function Effort_Base() {
   let base_field = useSelector((state) => state.initial_data);
 
   const handleSubmit = (event) => {
-    dispatch({ type: "CHANGE_STAGE", data: 1 });
     console.log("submitting");
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
     let newdata = JSON.stringify({ ...entered_data, effort });
