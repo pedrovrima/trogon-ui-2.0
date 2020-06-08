@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
-import { VarField } from "../functions";
+import { VarField, CaptureNavigationButtons } from "../functions";
 import VarModal from "../capture_opt_vars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -214,7 +214,7 @@ export default function CaptureInit() {
             </div>
           </div>
         </div>
-
+<CaptureNavigationButtons/>
       </form>
     </>
   );
