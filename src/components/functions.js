@@ -22,7 +22,7 @@ export function NavigationButtons(handleSub = () => null) {
             onClick={() => {
               dispatch({ type: "CHANGE_STAGE", data: -1 });
             }}
-            disabled={invalidValue || effort_stage === 0}
+             disabled={effort_stage === 0}
           >
             
             Anterior
@@ -37,7 +37,7 @@ export function NavigationButtons(handleSub = () => null) {
                 ? dispatch({ type: "CHANGE_STAGE", data: 1 })
                 : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
             }}
-            disabled={invalidValue}
+            // disabled={invalidValue}
             type="button"
           >
             {effort_stage < 3 ? "Próximo" : "Iniciar Capturas"}
@@ -237,4 +237,46 @@ export function  VarField (...props){
     duplicable={a_props.variable.duplicable}
   ></TextField>
   )
+}
+
+
+
+export function CaptureNavigationButtons(handleSub = () => null) {
+  const capture_stage = useSelector((state) => state.capture_stage);
+  const entry_stage = useSelector((state) => state.entry_stage);
+  const dispatch = useDispatch();
+
+  let invalidValue = useSelector((state) => state.enter_data.form_invalid);
+  return (
+    <Container>
+      <Row className="mb-3 mt-5">
+        <Col md={{ span: 2, offset: 8 }}>
+          <Button
+            onClick={() => {
+              dispatch({ type: "CHANGE_CAPTURE_STAGE", data: -1 });
+            }}
+             disabled={capture_stage === 0}
+          >
+            
+            Anterior
+          </Button>
+        </Col>
+        <Col md={{ span: 2 }}>
+          <Button
+            color="blue"
+            onClick={(e) => {
+              // handleSub.handleSub(e);
+              capture_stage < 3
+                ? dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 })
+                : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
+            }}
+            // disabled={invalidValue}
+            type="button"
+          >
+            {capture_stage < 3 ? "Próximo" : "Iniciar Capturas"}
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
