@@ -1,6 +1,7 @@
 import React, {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
+import {CaptureNavigationButtons} from "../functions"
 
 export default function CaptureVals() {
   let dispatch = useDispatch();
@@ -80,6 +81,7 @@ export default function CaptureVals() {
             );
           })}
         </div>
+        <CaptureNavigationButtons/>
       </form>
     </>
   );

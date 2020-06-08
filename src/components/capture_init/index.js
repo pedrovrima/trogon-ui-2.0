@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
-import { onlyUnique } from "../functions";
+import { onlyUnique , CaptureNavigationButtons} from "../functions";
 import { Typeahead } from "react-bootstrap-typeahead"; // ES2015
 
 export default function CaptureInit() {
@@ -230,7 +230,7 @@ export default function CaptureInit() {
           </div>
         </div>
 
-        <button type="submit">AAA</button>
+        <CaptureNavigationButtons/>
       </form>
     </>
   );
