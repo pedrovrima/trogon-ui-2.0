@@ -1,10 +1,10 @@
 import { createStore } from "redux";
 const INITIAL_STATE = {
-  entry_stage: "capture",
+  entry_stage: "effort",
   initial_data: {},
   loaded: 0,
   capture_index: 0,
-  capture_stage: 1,
+  capture_stage: 2,
   data_stage: 0,
   enter_data: {
     field_invalid: {},
@@ -39,13 +39,17 @@ function pre_store(state = INITIAL_STATE, action) {
     case "UPDATE_CAPTURE_VALUE":
       return {
         ...state,
-        enter_data: { ...state.enter_data, captures: {...state.enter_data.captures,[action.index]:action.data} },
+        enter_data: {
+          ...state.enter_data,
+          captures: {
+            ...state.enter_data.captures,
+            [action.index]: action.data,
+          },
+        },
       };
 
-
-     case "SET_CAPTURE_VALUE":
-             
-     return state
+    case "SET_CAPTURE_VALUE":
+      return state;
 
     case "ADD_CAPTURE":
       new_state = state.enter_data.captures.push(action.data);
@@ -71,8 +75,8 @@ function pre_store(state = INITIAL_STATE, action) {
       return new_state;
 
     case "LOCAL_SETTER":
-      new_state = { ...state, initial_data: action.data };
-      return new_state;
+      console.log(action.data);
+      return { ...state, initial_data: action.data };
     case "NET_NUM":
       nets = state.enter_data.effort.mistnets.nets;
       nets[action.i].net_number = action.data;
@@ -144,10 +148,22 @@ function pre_store(state = INITIAL_STATE, action) {
     case "BASE_EFFORT":
       new_state = {
         ...state,
-        enter_data: { ...state.enter_data, base: action.data },
+        enter_data: {
+          ...state.enter_data,
+          effort: { ...state.enter_data.effort, base: action.data },
+        },
       };
       return new_state;
 
+    case "SUMMARY_EFFORT":
+
+      return {
+        ...state,
+        enter_data: {
+          ...state.enter_data,
+          effort: { ...state.enter_data.effort, summary: action.data },
+        },
+      };
     case "MIST_INFO":
       Object.assign(state.enter_data.effort, { mistnets: action.data });
       return state;
