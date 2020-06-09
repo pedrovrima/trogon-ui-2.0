@@ -1,8 +1,12 @@
 import axios from 'axios';
+import store from '../store';
+
 
 
 
 const setLocalStorage = async function (key, value) {
+    // let dispatch=store.dispatch();
+
     let basicStructure = {
         first: 0,
         lastUpdate: "Jan 11, 1991",
@@ -56,12 +60,15 @@ const setLocalStorage = async function (key, value) {
         'key',
     );
 
+
     if (newStore !== null) {
         localStorage.setItem("registerData", JSON.stringify({ ...newStore }))
         localStorage.setItem("lastUpdate", new Date())
+        // dispatch({ type: 'LOCAL_STORAGE_DATA', data: newStore })
     } else {
         console.log("all up to date")
     }
+    return(newStore)
 
 
 }
