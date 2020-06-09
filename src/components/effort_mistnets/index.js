@@ -39,7 +39,6 @@ export default function Effort_Nets() {
   const netnums = station_mistnets.map((net) => net.net_number);
 
   const handleSubmit = (event) => {
-    dispatch({ type: "CHANGE_STAGE", data: 1 });
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
     let newdata = JSON.stringify({ ...entered_data, effort });
     localStorage.setItem("entry_data", newdata);
