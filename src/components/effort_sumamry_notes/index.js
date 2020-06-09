@@ -32,6 +32,11 @@ export default function Effort_Base() {
 
     event.preventDefault();
   };
+  const onChangeSummary = (event, key) => {
+    let value = event.target.value;
+    let new_summary = { ...summary, [key]: value };
+    dispatch({ type: "SUMMARY_EFFORT", data:new_summary });
+  };
 
   return (
     <Form onSubmit={handleSubmit} className="form">
@@ -46,6 +51,7 @@ export default function Effort_Base() {
                 name="new"
                 value={summary.new}
                 title="Novos"
+                onChange={(e)=>onChangeSummary(e,"new")}
               />
             </Row>
             <Row>
@@ -56,6 +62,8 @@ export default function Effort_Base() {
                 name="recapture"
                 value={summary.recapture}
                 title="Recaptura"
+                onChange={(e)=>onChangeSummary(e,"recapture")}
+
               ></TextField>
             </Row>
             <Row>
@@ -66,6 +74,8 @@ export default function Effort_Base() {
                 name="unbanded"
                 value={summary.unbanded}
                 title="Sem Anilha"
+                onChange={(e)=>onChangeSummary(e,"unbanded")}
+
               ></TextField>
             </Row>
             <Row>
@@ -80,7 +90,7 @@ export default function Effort_Base() {
           <Col>
             <TextField
               value={notes}
-              type="cont"
+              type="notes"
               form="effort"
               name="notes"
               onChange={(e) =>
