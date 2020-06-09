@@ -6,7 +6,6 @@ import EffortParamBander from '../effort_param_bander';
 import EffortSummaryNotes from '../effort_sumamry_notes';
 import CaptureCotainer from "../capture_container"
 
-import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import div from 'react-bootstrap/Col'
 
