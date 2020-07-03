@@ -5,8 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useSelector, useDispatch } from "react-redux";
 import validateDate from "validate-date";
-import TextField from "./input_field"
-
+import TextField from "./input_field";
 
 export function NavigationButtons(handleSub = () => null) {
   const effort_stage = useSelector((state) => state.data_stage);
@@ -22,9 +21,8 @@ export function NavigationButtons(handleSub = () => null) {
             onClick={() => {
               dispatch({ type: "CHANGE_STAGE", data: -1 });
             }}
-             disabled={effort_stage === 0}
+            disabled={effort_stage === 0}
           >
-            
             Anterior
           </Button>
         </Col>
@@ -75,14 +73,14 @@ export function createCapture(protocol_variables) {
     return { name: variable.name, a_value: "" };
   });
 
-  let ageSex = [{name:"age_wrp",a_value:""},
-  {name:"age_criteria",a_value:""},
-  {name:"sex",a_value:""},
-  {name:"sex_criteria",a_value:""}
-  ]
+  let ageSex = [
+    { name: "age_wrp", a_value: "" },
+    { name: "age_criteria", a_value: "" },
+    { name: "sex", a_value: "" },
+    { name: "sex_criteria", a_value: "" },
+  ];
 
-  
-  ageSex.map((avar)=> cap_vars.push(avar))
+  ageSex.map((avar) => cap_vars.push(avar));
 
   return {
     capture_time: "",
@@ -103,7 +101,6 @@ export function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-
 export function createChecker(
   unit,
   type,
@@ -116,8 +113,12 @@ export function createChecker(
     switch (unit) {
       case "percentage":
         return {
-          check: () =>value === "NA" ?  false :
-            !Number(value) ? !Number(value) : value > 100 || value < 0,
+          check: () =>
+            value === "NA"
+              ? false
+              : !Number(value)
+              ? !Number(value)
+              : value > 100 || value < 0,
           message: "Valores devem estar entre 0 e 100",
           props: {
             options: {
@@ -140,7 +141,7 @@ export function createChecker(
 
       default:
         return {
-          check: () => value === "NA" ?  false : !Number(value),
+          check: () => (value === "NA" ? false : !Number(value)),
           message: "Deve ser um número",
           props: {
             options: {
@@ -215,36 +216,70 @@ export function createChecker(
         check: () => null,
       };
     default:
-      return{
-        check:()=> null
-      }
+      return {
+        check: () => null,
+      };
       break;
   }
 }
 
-
-export function  VarField (...props){
-
-  let a_props=props[0]
-  return(
+export function VarField(...props) {
+  let a_props = props[0];
+  return (
     <TextField
-    type={a_props.variable.type}
-    onChange={(e) => a_props.onChangeFunc(e, a_props.variable.name)}
-    value={a_props.value}
-    title={a_props.variable.portuguese_label}
-    protocol_options={a_props.variable.options}
-    unit={a_props.variable.unit}
-    duplicable={a_props.variable.duplicable}
-  ></TextField>
-  )
+      type={a_props.variable.type}
+      onChange={(e) => a_props.onChangeFunc(e, a_props.variable.name)}
+      value={a_props.value}
+      title={a_props.variable.portuguese_label}
+      protocol_options={a_props.variable.options}
+      unit={a_props.variable.unit}
+      duplicable={a_props.variable.duplicable}
+    ></TextField>
+  );
 }
 
-
-
 export function CaptureNavigationButtons(handleSub = () => null) {
+  let capture_index = useSelector((state) => state.capture_index);
+  let dispatch = useDispatch();
+  let capture_data = useSelector((state) => state.enter_data.captures);
+  let setCaptureIndex = (value) =>
+    dispatch({ type: "CHANGE_CAPTURE_INDEX", data: value });
+  let effort_values = useSelector((state) => state.enter_data.effort);
+
+  let user_protocols = useSelector((state) => state.initial_data.protocols);
+  let capture_variables = useSelector(
+    (state) => state.initial_data.capture_variables
+  );
+  let this_protocol = effort_values.base.protocol;
+
+  let protocol_variables = user_protocols.filter(
+    (prot) => prot.protocol_code === this_protocol
+  )[0].vars;
+
+  let mandatory_variables_id = protocol_variables
+    .filter((vars) => vars.mandatory === 1)
+    .map((vars) => vars.capture_variable_id);
+  let mandatory_variables = capture_variables.filter(
+    (variable) =>
+      mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
+  );
+
   const capture_stage = useSelector((state) => state.capture_stage);
   const entry_stage = useSelector((state) => state.entry_stage);
-  const dispatch = useDispatch();
+  let fake_capture_data = createCapture(mandatory_variables);
+
+  const finishCapture = () => {
+    const entered_data = JSON.parse(localStorage.getItem("entry_data"));
+    let newdata = JSON.stringify({
+      ...entered_data,
+      captures: capture_data,
+    });
+    localStorage.setItem("entry_data", newdata);
+
+    dispatch({ type: "ADD_CAPTURE", data: fake_capture_data });
+    dispatch({ type: "CHANGE_CAPTURE_INDEX", data: "new" });
+    dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 0 });
+  };
 
   let invalidValue = useSelector((state) => state.enter_data.form_invalid);
   return (
@@ -255,9 +290,8 @@ export function CaptureNavigationButtons(handleSub = () => null) {
             onClick={() => {
               dispatch({ type: "CHANGE_CAPTURE_STAGE", data: -1 });
             }}
-             disabled={capture_stage === 0}
+            disabled={capture_stage === 0}
           >
-            
             Anterior
           </Button>
         </Col>
@@ -266,14 +300,14 @@ export function CaptureNavigationButtons(handleSub = () => null) {
             color="blue"
             onClick={(e) => {
               // handleSub.handleSub(e);
-              capture_stage < 3
+              capture_stage < 2
                 ? dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 })
-                : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
+                : finishCapture();
             }}
             // disabled={invalidValue}
             type="button"
           >
-            {capture_stage < 3 ? "Próximo" : "Iniciar Capturas"}
+            {capture_stage < 2 ? "Próximo" : "Iniciar Capturas"}
           </Button>
         </Col>
       </Row>

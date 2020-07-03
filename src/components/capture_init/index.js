@@ -8,8 +8,9 @@ export default function CaptureInit() {
   let dispatch = useDispatch();
   let capture_index = useSelector((state) => state.capture_index);
   let all_capture_values = useSelector((state) => state.enter_data.captures);
-
+  console.log(capture_index)
   let capture_values = all_capture_values[capture_index];
+  console.log(capture_index,capture_values)
   let effort_values = useSelector((state) => state.enter_data.effort);
   let effort_nets = effort_values.mistnets.nets.map((net) => net.net_number);
   let acc_code = useSelector((state) => state.initial_data.capture_variables);
@@ -17,15 +18,15 @@ export default function CaptureInit() {
     state.initial_data.bands.map((string) => string.size).filter(onlyUnique)
   );
 
+
   let filter_band = (bandi)=>capture_values.capture_code==="R"?bandi.used:!bandi.used 
 
   let band_options = useSelector((state) => state.initial_data.bands)
     .filter((band) => band.size === capture_values.band_size)
     .map((band) => band.bands.filter(filter_band).map((bandi)=>bandi.band_number).sort((a, b)=>a-b)[0])
-    
-    
-    console.log(band_options)
- 
+
+   
+
      let capture_codes = acc_code
     .filter((value) => value.name === "band_code")[0]
     .options.map((vals) => vals.value_oama);

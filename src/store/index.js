@@ -37,14 +37,13 @@ function pre_store(state = INITIAL_STATE, action) {
 
   switch (action.type) {
     case "UPDATE_CAPTURE_VALUE":
-      return {
+    let old_captures = state.enter_data.captures
+    old_captures[action.index]=action.data;  
+    return {
         ...state,
         enter_data: {
           ...state.enter_data,
-          captures: {
-            ...state.enter_data.captures,
-            [action.index]: action.data,
-          },
+          captures: old_captures,
         },
       };
 
@@ -68,6 +67,14 @@ function pre_store(state = INITIAL_STATE, action) {
         ? (cap_stage = action.data)
         : (cap_stage = state.capture_stage + action.data);
       Object.assign(state, { capture_stage: cap_stage });
+      return state;
+
+    case "CHANGE_CAPTURE_INDEX":
+      let cap_index;
+      action.data === "new"
+        ? (cap_index = (state.enter_data.captures.length-1))
+        : (cap_index = action.data);
+      Object.assign(state, { capture_index: cap_index });
       return state;
 
     case "LOADER":
@@ -156,7 +163,6 @@ function pre_store(state = INITIAL_STATE, action) {
       return new_state;
 
     case "SUMMARY_EFFORT":
-
       return {
         ...state,
         enter_data: {

@@ -5,7 +5,6 @@ import { VarField, CaptureNavigationButtons } from "../functions";
 import VarModal from "../capture_opt_vars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 export default function CaptureInit() {
   let dispatch = useDispatch();
   let capture_index = useSelector((state) => state.capture_index);
@@ -190,31 +189,31 @@ export default function CaptureInit() {
           </div>
 
           <div className="col-6">
-            <h6>Variáveis Extras</h6>                <FontAwesomeIcon
-                  onClick={() => setModal(true)
-                  }
-                  icon="plus"
-                  color="green"
-                />
-
+            <h6>Variáveis Extras</h6>{" "}
+            <FontAwesomeIcon
+              onClick={() => setModal(true)}
+              icon="plus"
+              color="green"
+            />
             <div className="row">
-              {capture_values.extra_vars?
-              capture_values.extra_vars.map((e_var) => {
-                let this_variable = getVariable(cap_variables, e_var.name);
-                return (
-                  <div className="col-6">
-                    <VarField
-                      variable={this_variable}
-                      value={extra_this_value(this_variable)}
-                      onChangeFunc={onChangeExtraVar}
-                    />
-                  </div>
-                );
-              }):null}
+              {capture_values.extra_vars
+                ? capture_values.extra_vars.map((e_var) => {
+                    let this_variable = getVariable(cap_variables, e_var.name);
+                    return (
+                      <div className="col-6">
+                        <VarField
+                          variable={this_variable}
+                          value={extra_this_value(this_variable)}
+                          onChangeFunc={onChangeExtraVar}
+                        />
+                      </div>
+                    );
+                  })
+                : null}
             </div>
           </div>
         </div>
-<CaptureNavigationButtons/>
+        <CaptureNavigationButtons />
       </form>
     </>
   );
