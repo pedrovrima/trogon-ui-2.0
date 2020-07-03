@@ -104,7 +104,6 @@ export function onlyUnique(value, index, self) {
 export function createChecker(
   unit,
   type,
-  value,
   user_options,
   new_options,
   options
@@ -113,7 +112,7 @@ export function createChecker(
     switch (unit) {
       case "percentage":
         return {
-          check: () =>
+          check: (value) =>
             value === "NA"
               ? false
               : !Number(value)
@@ -129,7 +128,7 @@ export function createChecker(
 
       case "nets":
         return {
-          check: () => value > user_options,
+          check: (value) => value > user_options,
           message:
             "Esta estação possui apenas " + user_options + " registradas",
           props: {
@@ -141,7 +140,7 @@ export function createChecker(
 
       default:
         return {
-          check: () => (value === "NA" ? false : !Number(value)),
+          check: (value) => (value === "NA" ? false : !Number(value)),
           message: "Deve ser um número",
           props: {
             options: {
@@ -155,7 +154,7 @@ export function createChecker(
   switch (type) {
     case "val":
       return {
-        check: () =>
+        check: (value) =>
           value === "NA" ? false : new_options[0].indexOf(value) < 0,
         message: "Valores permitidos:" + new_options,
         props: {
@@ -167,7 +166,7 @@ export function createChecker(
 
     case "date":
       return {
-        check: () => !validateDate(value, "boolean", "dd/mm/yyyy"),
+        check: (value) => !validateDate(value, "boolean", "dd/mm/yyyy"),
         message: "Data inválida",
         props: {
           options: { date: true },
@@ -180,7 +179,7 @@ export function createChecker(
 
     case "time":
       return {
-        check: () => value === "",
+        check: (value) => value === "",
         message: "No message",
         props: {
           options: {
@@ -192,7 +191,7 @@ export function createChecker(
 
     case "cap_time":
       return {
-        check: () => value.length > 3,
+        check: (value) => value.length > 3,
         message: "Máximo de 3 caracteres",
       };
 
@@ -213,11 +212,11 @@ export function createChecker(
 
     case "band_number":
       return {
-        check: () => null,
+        check: (value) => null,
       };
     default:
       return {
-        check: () => null,
+        check: (value) => null,
       };
       break;
   }
