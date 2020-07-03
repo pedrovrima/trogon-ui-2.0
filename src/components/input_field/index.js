@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { useDispatch } from "react-redux";
 import Cleave from "cleave.js/react";
-import {createChecker, NameCreator } from "../functions";
+import { createChecker, NameCreator } from "../functions";
 
 export default function RegularField({
   variable = null,
@@ -34,7 +34,7 @@ export default function RegularField({
 
   useEffect(() => {
     let is_invalid = checker.check(value);
-    dispatch(setInvalidation(is_invalid, name));
+    let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
   }, []);
 
   const dispatch = useDispatch();
@@ -53,13 +53,17 @@ export default function RegularField({
     );
   };
 
-
-
-  const checker = createChecker (unit,type,value, user_options, new_options,options)
+  const checker = createChecker(
+    unit,
+    type,
+    user_options,
+    new_options,
+    options
+  );
   const checkInvalid = (value) => {
     let is_invalid = checker.check(value);
     setInvalid(is_invalid);
-    dispatch(setInvalidation(is_invalid, name));
+    let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
   };
 
   return (
@@ -68,14 +72,24 @@ export default function RegularField({
       <Row>
         {["spp_name", "band_number"].indexOf(type) < 0 ? (
           <Form.Control
+            {...props}
             as={Cleave}
             name={name}
             value={value}
             isInvalid={invalid}
             onBlur={checkInvalid}
             onFocus={() => setInvalid(0)}
+            onChange={(e) => {
+              props.onChange(e);
+              console.log(e.target.value);
+              let is_invalid = checker.check(e.target.value);
+              console.log(is_invalid,e.target.value,checker.check(e.target.value));
+
+              let checkInv = props.checkFunc
+                ? props.checkFunc(name, is_invalid)
+                : null;
+            }}
             {...checker.props}
-            {...props}
           />
         ) : (
           <Typeahead
