@@ -185,6 +185,7 @@ export default function CaptureInit() {
               onChange={(e,value) => onChangeBand(e, value)}
               selected={band_entered}
               value={band_entered}
+              id="b_num"
               form="captures"
               name="band_number"
               title="Número da Anilha"
@@ -195,10 +196,10 @@ export default function CaptureInit() {
         <div className="row align-items-center">
           <div className="col-6">
             <TextField
+            id="spp_name"
               title="Especie"
               type="spp_name"
               form="captures"
-              id="basic-typeahead-example"
               filterBy={["code", "sci_name"]}
               labelKey="code"
               onChange={(e, value) => onChangeSpp(e, value)}
