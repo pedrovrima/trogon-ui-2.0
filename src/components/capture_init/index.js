@@ -19,6 +19,13 @@ export default function CaptureInit() {
   );
 
 
+  let [checkFields,setCheckFields]=useState({})
+
+  let thisCheck = (name,value)=>{
+    let newCheck={...checkFields,[name]:value}
+    setCheckFields(newCheck)
+  }
+
   let filter_band = (bandi)=>capture_values.capture_code==="R"?bandi.used:!bandi.used 
 
   let band_options = useSelector((state) => state.initial_data.bands)
@@ -121,6 +128,7 @@ export default function CaptureInit() {
               upper_level="base"
               name="capture_time"
               title="Horário de Captura"
+              checkFunc={thisCheck}
             ></TextField>
           </div>
 
@@ -134,6 +142,8 @@ export default function CaptureInit() {
               upper_level="base"
               name="bander"
               title="Anilhador"
+              checkFunc={thisCheck}
+
             ></TextField>
           </div>
 
