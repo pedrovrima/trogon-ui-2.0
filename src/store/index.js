@@ -37,13 +37,17 @@ function pre_store(state = INITIAL_STATE, action) {
 
   switch (action.type) {
     case "UPDATE_CAPTURE_VALUE":
-    let old_captures = state.enter_data.captures
-    old_captures[action.index]=action.data;  
+    let restArray = state.enter_data.captures.length>1?state.enter_data.captures.slice(1):[]
+    let sliceLow = action.index===0?[action.data,...restArray]:[...state.enter_data.captures.slice(0,action.index),
+    action.data,...state.enter_data.captures.slice(action.index+1)]
+    console.log(state.enter_data.captures.slice(0,1))
     return {
         ...state,
         enter_data: {
           ...state.enter_data,
-          captures: old_captures,
+          captures: 
+            sliceLow
+          
         },
       };
 
