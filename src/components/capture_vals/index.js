@@ -64,6 +64,7 @@ export default function CaptureVals() {
               })[0].a_value;
             };
 
+            console.log(this_value())
             return (
               <>
                 <div className="col-3">
