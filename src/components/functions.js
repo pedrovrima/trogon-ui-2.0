@@ -307,7 +307,7 @@ export function CaptureNavigationButtons(handleSub = () => null) {
             // disabled={invalidValue}
             type="button"
           >
-            {capture_stage < 2 ? "Próximo" : "Iniciar Capturas"}
+            {capture_stage < 2 ? "Próximo" : "Nova captura"}
           </Button>
         </Col>
       </Row>
