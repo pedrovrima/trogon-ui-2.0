@@ -37,12 +37,10 @@ export default function RegularField({
     let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
   }, []);
 
-  const dispatch = useDispatch();
+
+
   let [invalid, setInvalid] = useState(0);
 
-  function setInvalidation(data, key) {
-    return { type: "FORM_VALIDATION", data: data, key: key };
-  }
 
   const createTitle = (title, unit) => {
     let newT = NameCreator(title, unit);
@@ -60,11 +58,13 @@ export default function RegularField({
     new_options,
     options
   );
-  const checkInvalid = (value) => {
+  const checkInvalid = () => {
     let is_invalid = checker.check(value);
+    if(is_invalid!==invalid){
+      let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
+    }
     setInvalid(is_invalid);
-    let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
-  };
+      };
 
   return (
     <Form.Group as={Col}>
@@ -77,17 +77,15 @@ export default function RegularField({
             name={name}
             value={value}
             isInvalid={invalid}
-            onBlur={checkInvalid}
+            onBlur={()=>checkInvalid()}
             onFocus={() => setInvalid(0)}
             onChange={(e) => {
               props.onChange(e);
               console.log(e.target.value);
               let is_invalid = checker.check(e.target.value);
-              console.log(is_invalid,e.target.value,checker.check(e.target.value));
-
-              let checkInv = props.checkFunc
-                ? props.checkFunc(name, is_invalid)
-                : null;
+              if(is_invalid!==invalid){
+                let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
+              }
             }}
             {...checker.props}
           />
