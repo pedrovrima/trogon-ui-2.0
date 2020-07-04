@@ -25,7 +25,7 @@ export default function CaptureInit() {
     setCheckFields(newCheck);
   };
 
-  let [invalidForm, setInvalidForm] = useState(true);
+  let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
@@ -173,6 +173,8 @@ export default function CaptureInit() {
               upper_level="base"
               name="net_number"
               title="Rede"
+              checkFunc={thisCheck}
+
             ></TextField>
           </div>
         </div>
@@ -188,6 +190,8 @@ export default function CaptureInit() {
               upper_level="base"
               name="capture_code"
               title="Código de Captura"
+              checkFunc={thisCheck}
+
             ></TextField>
           </div>
 
@@ -201,6 +205,8 @@ export default function CaptureInit() {
               upper_level="base"
               name="band_size"
               title="Tamanha da Anilha"
+              checkFunc={thisCheck}
+
             ></TextField>
           </div>
 
@@ -215,6 +221,8 @@ export default function CaptureInit() {
               form="captures"
               name="band_number"
               title="Número da Anilha"
+              checkFunc={thisCheck}
+
             ></TextField>
           </div>
         </div>
@@ -222,6 +230,8 @@ export default function CaptureInit() {
         <div className="row align-items-center">
           <div className="col-6">
             <TextField
+                          checkFunc={thisCheck}
+
               id="spp_name"
               title="Especie"
               type="spp_name"
@@ -258,7 +268,7 @@ export default function CaptureInit() {
           </div>
         </div>
 
-        <CaptureNavigationButtons invalidForm />
+        <CaptureNavigationButtons invalidForm={invalidForm} key={invalidForm} />
       </form>
     </>
   );

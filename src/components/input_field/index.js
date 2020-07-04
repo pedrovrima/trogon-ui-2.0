@@ -83,6 +83,7 @@ export default function RegularField({
               props.onChange(e);
               console.log(e.target.value);
               let is_invalid = checker.check(e.target.value);
+              console.log(is_invalid)
               if(is_invalid!==invalid){
                 let checkInv = props.checkFunc ? props.checkFunc(name, is_invalid) : null;
               }

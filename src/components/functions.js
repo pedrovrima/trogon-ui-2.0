@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -221,18 +221,20 @@ export function VarField(...props) {
   return (
     <TextField
       type={a_props.variable.type}
-      onChange={(e) => a_props.onChangeFunc(e, a_props.variable.name)}
+      onChange={(e) => {
+        a_props.onChangeFunc(e, a_props.variable.name)}}
       value={a_props.value}
       title={a_props.variable.portuguese_label}
       protocol_options={a_props.variable.options}
       unit={a_props.variable.unit}
       duplicable={a_props.variable.duplicable}
+      checkFunc={a_props.checkFunc}
     ></TextField>
   );
 }
 
-export function CaptureNavigationButtons(handleSub = () => null,props) {
-  console.log(props)
+export function CaptureNavigationButtons(props) {
+  useEffect(() => console.log(props), [props]);
   let capture_index = useSelector((state) => state.capture_index);
   let dispatch = useDispatch();
   let capture_data = useSelector((state) => state.enter_data.captures);
@@ -292,7 +294,6 @@ export function CaptureNavigationButtons(handleSub = () => null,props) {
           <Button
             color="blue"
             onClick={(e) => {
-              // handleSub.handleSub(e);
               capture_stage < 2
                 ? dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 })
                 : finishCapture();

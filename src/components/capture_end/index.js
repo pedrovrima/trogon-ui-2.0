@@ -5,7 +5,7 @@ import { VarField, CaptureNavigationButtons } from "../functions";
 import VarModal from "../capture_opt_vars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function CaptureInit() {
+export default function CaptureEnd() {
   let dispatch = useDispatch();
   let capture_index = useSelector((state) => state.capture_index);
   let all_capture_values = useSelector((state) => state.enter_data.captures);
@@ -28,6 +28,29 @@ export default function CaptureInit() {
   let cap_variables = capture_variables.filter(
     (variable) => cap_variables_id.indexOf(variable.capture_variable_id) > -1
   );
+
+  let [checkFields, setCheckFields] = useState({});
+
+  let thisCheck = (name, value) => {
+    let newCheck = { ...checkFields, [name]: value };
+    setCheckFields(newCheck);
+  };
+
+  let [invalidForm, setInvalidForm] = useState(false);
+
+  let checkForm = () => {
+    console.log("checking")
+    let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
+      return sum + Number(checkFields[key]);
+    }, 0);
+
+    let formInvalid = invalidSum > 0 ? true : false;
+    setInvalidForm(formInvalid);
+  };
+
+  useEffect(() => {
+    checkForm();
+  }, [checkFields]);
 
   let [extraVars, newVars] = useState([]);
 
@@ -146,6 +169,8 @@ export default function CaptureInit() {
                   variable={age_wrp}
                   value={this_value(age_wrp)}
                   onChangeFunc={onChangeCapVar}
+                  checkFunc={thisCheck}
+
                 />
               </div>
               <div className="col-6">
@@ -153,6 +178,8 @@ export default function CaptureInit() {
                   variable={age_criteria}
                   value={this_value(age_criteria)}
                   onChangeFunc={onChangeCapVar}
+                  checkFunc={thisCheck}
+
                 />
               </div>
             </div>
@@ -164,6 +191,8 @@ export default function CaptureInit() {
                   variable={sex}
                   value={this_value(sex)}
                   onChangeFunc={onChangeCapVar}
+                  checkFunc={thisCheck}
+
                 />
               </div>
               <div className="col-6">
@@ -171,6 +200,8 @@ export default function CaptureInit() {
                   variable={sex_criteria}
                   value={this_value(sex_criteria)}
                   onChangeFunc={onChangeCapVar}
+                  checkFunc={thisCheck}
+
                 />
               </div>
             </div>
@@ -205,6 +236,8 @@ export default function CaptureInit() {
                           variable={this_variable}
                           value={extra_this_value(this_variable)}
                           onChangeFunc={onChangeExtraVar}
+                          checkFunc={thisCheck}
+
                         />
                       </div>
                     );
@@ -213,7 +246,7 @@ export default function CaptureInit() {
             </div>
           </div>
         </div>
-        <CaptureNavigationButtons />
+        <CaptureNavigationButtons invalidForm={invalidForm} key={invalidForm} />
       </form>
     </>
   );

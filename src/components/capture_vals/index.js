@@ -1,4 +1,4 @@
-import React, {  useEffect } from "react";
+import React, {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
 import {CaptureNavigationButtons} from "../functions"
@@ -53,6 +53,29 @@ export default function CaptureVals() {
     event.preventDefault();
   };
 
+  let [checkFields, setCheckFields] = useState({});
+
+  let thisCheck = (name, value) => {
+    let newCheck = { ...checkFields, [name]: value };
+    setCheckFields(newCheck);
+  };
+
+  let [invalidForm, setInvalidForm] = useState(false);
+
+  let checkForm = () => {
+    let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
+      return sum + Number(checkFields[key]);
+    }, 0);
+
+    let formInvalid = invalidSum > 0 ? true : false;
+    setInvalidForm(formInvalid);
+  };
+
+  useEffect(() => {
+    checkForm();
+  }, [checkFields]);
+
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -69,12 +92,15 @@ export default function CaptureVals() {
               <>
                 <div className="col-3">
                   <TextField
+
                     type={variable.type}
                     onChange={(e) => onChangeCap(e, variable.name)}
                     value={this_value()}
                     title={variable.portuguese_label}
                     protocol_options={variable.options}
                     unit={variable.unit}
+                    checkFunc={thisCheck}
+
                     duplicable={variable.duplicable}
                   ></TextField>
                 </div>
@@ -82,7 +108,7 @@ export default function CaptureVals() {
             );
           })}
         </div>
-        <CaptureNavigationButtons/>
+        <CaptureNavigationButtons invalidForm={invalidForm} key={invalidForm} />
       </form>
     </>
   );
