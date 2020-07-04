@@ -101,13 +101,7 @@ export function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-export function createChecker(
-  unit,
-  type,
-  user_options,
-  new_options,
-  options
-) {
+export function createChecker(unit, type, user_options, new_options, options) {
   const checkCont = () => {
     switch (unit) {
       case "percentage":
@@ -237,7 +231,8 @@ export function VarField(...props) {
   );
 }
 
-export function CaptureNavigationButtons(handleSub = () => null) {
+export function CaptureNavigationButtons(handleSub = () => null,props) {
+  console.log(props)
   let capture_index = useSelector((state) => state.capture_index);
   let dispatch = useDispatch();
   let capture_data = useSelector((state) => state.enter_data.captures);
@@ -280,7 +275,6 @@ export function CaptureNavigationButtons(handleSub = () => null) {
     dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 0 });
   };
 
-  let invalidValue = useSelector((state) => state.enter_data.form_invalid);
   return (
     <Container>
       <Row className="mb-3 mt-5">
@@ -303,7 +297,7 @@ export function CaptureNavigationButtons(handleSub = () => null) {
                 ? dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 })
                 : finishCapture();
             }}
-            // disabled={invalidValue}
+            disabled={props.invalidForm}
             type="button"
           >
             {capture_stage < 2 ? "Próximo" : "Nova captura"}
