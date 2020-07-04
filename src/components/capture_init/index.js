@@ -26,6 +26,23 @@ export default function CaptureInit() {
     setCheckFields(newCheck)
   }
 
+
+  let [invalidForm,setInvalidForm]=useState(true)
+
+  let checkForm = ()=>  {  
+    let invalidSum=Object.keys(checkFields).reduce((sum,key)=>{
+      return(sum+Number(checkFields[key])) 
+    },0)
+  
+
+    let formInvalid=invalidSum>0?true:false;
+  setInvalidForm(formInvalid)
+  }
+
+  useEffect(()=>{
+  checkForm()
+},[checkFields])
+
   let filter_band = (bandi)=>capture_values.capture_code==="R"?bandi.used:!bandi.used 
 
   let band_options = useSelector((state) => state.initial_data.bands)
@@ -242,7 +259,7 @@ export default function CaptureInit() {
           </div>
         </div>
 
-        <CaptureNavigationButtons/>
+        <CaptureNavigationButtons invalidForm/>
       </form>
     </>
   );
