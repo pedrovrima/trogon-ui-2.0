@@ -31,15 +31,19 @@ export default function CaptureEnd() {
 
   let [checkFields, setCheckFields] = useState({});
 
+ 
   let thisCheck = (name, value) => {
-    let newCheck = { ...checkFields, [name]: value };
-    setCheckFields(newCheck);
+    
+    setCheckFields(preCheck=> {return{...preCheck,
+    [name]:value}});
   };
+
+
 
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
-    console.log("checking")
+
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -51,6 +55,8 @@ export default function CaptureEnd() {
   useEffect(() => {
     checkForm();
   }, [checkFields]);
+
+
 
   let [extraVars, newVars] = useState([]);
 

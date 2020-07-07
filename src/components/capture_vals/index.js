@@ -53,12 +53,18 @@ export default function CaptureVals() {
     event.preventDefault();
   };
 
+  
   let [checkFields, setCheckFields] = useState({});
-
+ 
   let thisCheck = (name, value) => {
-    let newCheck = { ...checkFields, [name]: value };
-    setCheckFields(newCheck);
+    
+    setCheckFields(preCheck=> {return{...preCheck,
+    [name]:value}});
   };
+
+
+
+  useEffect(()=>console.log(checkFields),[checkFields])
 
   let [invalidForm, setInvalidForm] = useState(false);
 
@@ -100,7 +106,7 @@ export default function CaptureVals() {
                     protocol_options={variable.options}
                     unit={variable.unit}
                     checkFunc={thisCheck}
-
+                    name={variable.name}
                     duplicable={variable.duplicable}
                   ></TextField>
                 </div>

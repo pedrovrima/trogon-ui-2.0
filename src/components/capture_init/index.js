@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
 import { onlyUnique, CaptureNavigationButtons } from "../functions";
-import { Typeahead } from "react-bootstrap-typeahead"; // ES2015
 
 export default function CaptureInit() {
   let dispatch = useDispatch();
@@ -20,14 +19,19 @@ export default function CaptureInit() {
 
   let [checkFields, setCheckFields] = useState({});
 
+ 
   let thisCheck = (name, value) => {
-    let newCheck = { ...checkFields, [name]: value };
-    setCheckFields(newCheck);
+    
+    setCheckFields(preCheck=> {return{...preCheck,
+    [name]:value}});
   };
+
+
 
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
+
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -43,12 +47,18 @@ export default function CaptureInit() {
   let filter_band = (bandi) =>
     capture_values.capture_code === "R" ? bandi.used : !bandi.used;
 
+
+  let used_bands = all_capture_values.map(cap=>cap.band_number)
+  console.log(used_bands)
+
   let band_options = useSelector((state) => state.initial_data.bands)
-    .filter((band) => band.size === capture_values.band_size)
+    .filter((band) => band.size === capture_values.band_size )
     .map(
       (band) =>
         band.bands
-          .filter(filter_band)
+          .filter(bandi=>
+                           filter_band(bandi) && used_bands.indexOf(bandi.band_number)<0
+            )
           .map((bandi) => bandi.band_number)
           .sort((a, b) => a - b)[0]
     );
