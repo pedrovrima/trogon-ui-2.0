@@ -145,7 +145,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
     }
   };
 
-  switch (type) {
+  switch (type) { 
     case "val":
       return {
         check: (value) =>
@@ -160,10 +160,11 @@ export function createChecker(unit, type, user_options, new_options, options) {
 
     case "date":
       return {
-        check: (value) => !validateDate(value, "boolean", "dd/mm/yyyy"),
+        check:()=>null,
+        // check: (value) => !validateDate(value, "boolean", "dd/mm/yyyy"),
         message: "Data inválida",
         props: {
-          options: { date: true },
+          // options: { date: true },
         },
       };
 
