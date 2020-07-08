@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TextField from "../input_field";
+import TextField from "../../input_field";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavigationButtons, NameCreator } from "../functions";
+import { NavigationButtons, NameCreator } from "../../functions";
 
 function addCourseAction() {
   return { type: "CHANGE_STAGE", data: 1, key: "base" };

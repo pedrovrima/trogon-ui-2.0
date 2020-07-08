@@ -10,11 +10,9 @@ const INITIAL_STATE = {
     field_invalid: {},
     form_invalid: 1,
     effort: {
-      base: {
-        date: "",
-        station: "",
-        protocol: "",
-      },
+      date: "",
+      station: "",
+      protocol: "",
       mistnets: {
         total: "",
         open: "",
@@ -37,17 +35,24 @@ function pre_store(state = INITIAL_STATE, action) {
 
   switch (action.type) {
     case "UPDATE_CAPTURE_VALUE":
-    let restArray = state.enter_data.captures.length>1?state.enter_data.captures.slice(1):[]
-    let sliceLow = action.index===0?[action.data,...restArray]:[...state.enter_data.captures.slice(0,action.index),
-    action.data,...state.enter_data.captures.slice(action.index+1)]
-    console.log(state.enter_data.captures.slice(0,1))
-    return {
+      let restArray =
+        state.enter_data.captures.length > 1
+          ? state.enter_data.captures.slice(1)
+          : [];
+      let sliceLow =
+        action.index === 0
+          ? [action.data, ...restArray]
+          : [
+              ...state.enter_data.captures.slice(0, action.index),
+              action.data,
+              ...state.enter_data.captures.slice(action.index + 1),
+            ];
+      console.log(state.enter_data.captures.slice(0, 1));
+      return {
         ...state,
         enter_data: {
           ...state.enter_data,
-          captures: 
-            sliceLow
-          
+          captures: sliceLow,
         },
       };
 
@@ -76,7 +81,7 @@ function pre_store(state = INITIAL_STATE, action) {
     case "CHANGE_CAPTURE_INDEX":
       let cap_index;
       action.data === "new"
-        ? (cap_index = (state.enter_data.captures.length-1))
+        ? (cap_index = state.enter_data.captures.length - 1)
         : (cap_index = action.data);
       Object.assign(state, { capture_index: cap_index });
       return state;
@@ -156,12 +161,12 @@ function pre_store(state = INITIAL_STATE, action) {
       Object.assign(state.enter_data.effort, { [action.key]: action.data });
       return state;
 
-    case "BASE_EFFORT":
+    case "UPDATE_EFFORT":
       new_state = {
         ...state,
         enter_data: {
           ...state.enter_data,
-          effort: { ...state.enter_data.effort, base: action.data },
+          effort: action.data 
         },
       };
       return new_state;

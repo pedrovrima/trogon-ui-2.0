@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TextField from "../input_field";
+import TextField from "../../input_field";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputMask from "react-input-mask";
-import { NavigationButtons } from "../functions";
+import { NavigationButtons } from "../../functions";
 
 export default function Effort_Base() {
   const intNaN = (val) => (isNaN(val) ? 0 : val === null ? 0 : parseInt(val));
