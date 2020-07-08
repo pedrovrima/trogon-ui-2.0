@@ -43,6 +43,7 @@ const RegularField = (props) => {
       <Form.Control
         {...props}
         {...checker.props}
+        type={undefined}
 
         isInvalid={invalid}
         onBlur={() => checkInvalid()}
