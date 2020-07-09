@@ -8,7 +8,7 @@ export default function VarModal(props) {
     
 <Modal show={props.modalState} onHide={()=>props.setModal(false)}>    
 <Modal.Header closeButton >
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Variáveis Extras</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         {props.captureVars.map((capVar)=>{

@@ -50,10 +50,7 @@ const RegularField = (props) => {
         onFocus={() => setInvalid(0)}
         onChange={(e) => {
           props.onChange(e,props.i);
-          console.log(props.i)
-          console.log(e.target.value);
           let is_invalid = checker.check(e.target.value);
-          console.log(is_invalid);
           if (is_invalid !== invalid) {
             let checkInv = props.checkFunc
               ? props.checkFunc(props.name, is_invalid)

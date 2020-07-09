@@ -31,19 +31,15 @@ export default function CaptureEnd() {
 
   let [checkFields, setCheckFields] = useState({});
 
- 
   let thisCheck = (name, value) => {
-    
-    setCheckFields(preCheck=> {return{...preCheck,
-    [name]:value}});
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
   };
-
-
 
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
-
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -55,8 +51,6 @@ export default function CaptureEnd() {
   useEffect(() => {
     checkForm();
   }, [checkFields]);
-
-
 
   let [extraVars, newVars] = useState([]);
 
@@ -82,11 +76,11 @@ export default function CaptureEnd() {
 
   let [modalState, setModal] = useState(false);
 
-  const onChangeCapVar = (e, name) => {
+  const onChangeCapVar = (e, name, i) => {
     let new_cap = capture_values;
     let var_names = new_cap.variables.map((variable) => variable.name);
     let var_index = var_names.indexOf(name);
-    new_cap.variables[var_index].a_value = e.target.value;
+    new_cap.variables[var_index].a_value[i] = e.target.value;
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
       data: new_cap,
@@ -176,7 +170,6 @@ export default function CaptureEnd() {
                   value={this_value(age_wrp)}
                   onChangeFunc={onChangeCapVar}
                   checkFunc={thisCheck}
-
                 />
               </div>
               <div className="col-6">
@@ -185,7 +178,6 @@ export default function CaptureEnd() {
                   value={this_value(age_criteria)}
                   onChangeFunc={onChangeCapVar}
                   checkFunc={thisCheck}
-
                 />
               </div>
             </div>
@@ -198,7 +190,6 @@ export default function CaptureEnd() {
                   value={this_value(sex)}
                   onChangeFunc={onChangeCapVar}
                   checkFunc={thisCheck}
-
                 />
               </div>
               <div className="col-6">
@@ -207,7 +198,6 @@ export default function CaptureEnd() {
                   value={this_value(sex_criteria)}
                   onChangeFunc={onChangeCapVar}
                   checkFunc={thisCheck}
-
                 />
               </div>
             </div>
@@ -243,7 +233,6 @@ export default function CaptureEnd() {
                           value={extra_this_value(this_variable)}
                           onChangeFunc={onChangeExtraVar}
                           checkFunc={thisCheck}
-
                         />
                       </div>
                     );

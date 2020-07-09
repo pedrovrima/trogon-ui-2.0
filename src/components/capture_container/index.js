@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createCapture } from "../functions";
+import { createCapture, countCaptures } from "../functions";
 import CaptureEntry from "../capture_entry";
 import CaptureNav from "../capture_navigation"
 
@@ -42,6 +42,7 @@ export default function CaptureContainer(capture_data = null) {
 
   useEffect(() => {
     console.log(capture_data);
+    countCaptures()
     forceUpdate();
   }, [capture_data]);
 

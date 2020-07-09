@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -6,6 +6,29 @@ import Col from "react-bootstrap/Col";
 import { useSelector, useDispatch } from "react-redux";
 import validateDate from "validate-date";
 import TextField from "./input_field";
+import store from "../store";
+
+export function countCaptures() {
+  let state = store.getState();
+  let captures = state.enter_data.captures;
+  let count = captures.reduce((obj, capVal) => {
+    switch (capVal.capture_code) {
+      case "N":
+        obj.n++;
+        break;
+      case "R":
+        obj.r++;
+        break;
+      case "U":
+        obj.u++;
+        break;
+      default:
+
+    }
+  return obj},{n:0,r:0,u:0}
+  );
+  console.log(count)
+}
 
 export function NavigationButtons(handleSub = () => null) {
   const effort_stage = useSelector((state) => state.data_stage);
@@ -145,7 +168,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
     }
   };
 
-  switch (type) { 
+  switch (type) {
     case "val":
       return {
         check: (value) =>
@@ -160,7 +183,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
 
     case "date":
       return {
-        check:()=>null,
+        check: () => null,
         check: (value) => !validateDate(value, "boolean", "dd/mm/yyyy"),
         message: "Data inválida",
         props: {
@@ -221,9 +244,11 @@ export function VarField(...props) {
   let a_props = props[0];
   return (
     <TextField
+      name={a_props.variable.name}
       type={a_props.variable.type}
-      onChange={(e) => {
-        a_props.onChangeFunc(e, a_props.variable.name)}}
+      onChange={(e, i) => {
+        a_props.onChangeFunc(e, a_props.variable.name, i);
+      }}
       value={a_props.value}
       title={a_props.variable.portuguese_label}
       protocol_options={a_props.variable.options}

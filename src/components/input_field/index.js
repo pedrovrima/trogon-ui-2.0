@@ -6,9 +6,12 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { useDispatch } from "react-redux";
 import Cleave from "cleave.js/react";
 import { createChecker, NameCreator } from "../functions";
-import RegularField from "./regularfield"
+import RegularField from "./regularfield";
+import fieldFunctions from "./field_functions";
+
 export default function FieldGroup(props) {
 
+  const dispatch = useDispatch()
   const createTitle = (title, unit) => {
     let newT = NameCreator(title, unit);
     return (
@@ -20,14 +23,15 @@ export default function FieldGroup(props) {
 
   return (
     <Form.Group as={Col}>
-      {createTitle(props.title, props.unit)}
+      {createTitle(props.title, props.unit)}{" "}
+      {props.duplicable ? (
+        <div onClick={() => fieldFunctions.addField(props.name? props.name:props.variable.name, dispatch)}>+</div>
+      ) : null}
       <Row>
         {["spp_name", "band_number"].indexOf(props.type) < 0 ? (
           Array.isArray(props.value) ? (
-            props.value.map((val,i) => (
-              <RegularField as={Cleave} {...props}
-              i={i}
-              value={val} />
+            props.value.map((val, i) => (
+              <RegularField as={Cleave} {...props} i={i} value={val} />
             ))
           ) : (
             <RegularField as={Cleave} {...props} />
@@ -44,8 +48,6 @@ export default function FieldGroup(props) {
             options={props.options ? props.options : ""}
           />
         )}
-
-
       </Row>
     </Form.Group>
   );
