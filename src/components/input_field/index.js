@@ -23,9 +23,11 @@ export default function FieldGroup(props) {
       {createTitle(props.title, props.unit)}
       <Row>
         {["spp_name", "band_number"].indexOf(props.type) < 0 ? (
-          typeof props.value === "Array" ? (
-            props.value.map((val) => (
-              <RegularField as={Cleave} {...props} value={val} />
+          Array.isArray(props.value) ? (
+            props.value.map((val,i) => (
+              <RegularField as={Cleave} {...props}
+              i={i}
+              value={val} />
             ))
           ) : (
             <RegularField as={Cleave} {...props} />

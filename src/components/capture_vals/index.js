@@ -17,7 +17,7 @@ export default function CaptureVals() {
     (state) => state.initial_data.capture_variables
   );
 
-  let this_protocol = effort_values.base.protocol;
+  let this_protocol = effort_values.protocol;
 
   let protocol_variables = user_protocols.filter(
     (prot) => prot.protocol_code === this_protocol
@@ -31,11 +31,11 @@ export default function CaptureVals() {
       mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
   );
 
-  const onChangeCap = (e, name) => {
+  const onChangeCap = (e, name,i) => {
     let new_cap = this_capture_values;
     let var_names = new_cap.variables.map((variable) => variable.name);
     let var_index = var_names.indexOf(name);
-    new_cap.variables[var_index].a_value = e.target.value;
+    new_cap.variables[var_index].a_value[i] = e.target.value;
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
       data: new_cap,
@@ -100,7 +100,7 @@ export default function CaptureVals() {
                   <TextField
 
                     type={variable.type}
-                    onChange={(e) => onChangeCap(e, variable.name)}
+                    onChange={(e,i) => onChangeCap(e, variable.name,i)}
                     value={this_value()}
                     title={variable.portuguese_label}
                     protocol_options={variable.options}

@@ -16,7 +16,7 @@ export default function CaptureEnd() {
   let capture_variables = useSelector(
     (state) => state.initial_data.capture_variables
   );
-  let this_protocol = effort_values.base.protocol;
+  let this_protocol = effort_values.protocol;
 
   let protocol_variables = user_protocols.filter(
     (prot) => prot.protocol_code === this_protocol

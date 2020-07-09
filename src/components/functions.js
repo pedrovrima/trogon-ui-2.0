@@ -70,14 +70,14 @@ export function NameCreator(title = "", unit = null) {
 
 export function createCapture(protocol_variables) {
   let cap_vars = protocol_variables.map((variable) => {
-    return { name: variable.name, a_value: "" };
+    return { name: variable.name, a_value: [""] };
   });
 
   let ageSex = [
-    { name: "age_wrp", a_value: "" },
-    { name: "age_criteria", a_value: "" },
-    { name: "sex", a_value: "" },
-    { name: "sex_criteria", a_value: "" },
+    { name: "age_wrp", a_value: [""] },
+    { name: "age_criteria", a_value: [""] },
+    { name: "sex", a_value: [""] },
+    { name: "sex_criteria", a_value: [""] },
   ];
 
   ageSex.map((avar) => cap_vars.push(avar));
@@ -247,7 +247,7 @@ export function CaptureNavigationButtons(props) {
   let capture_variables = useSelector(
     (state) => state.initial_data.capture_variables
   );
-  let this_protocol = effort_values.base.protocol;
+  let this_protocol = effort_values.protocol;
 
   let protocol_variables = user_protocols.filter(
     (prot) => prot.protocol_code === this_protocol

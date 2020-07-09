@@ -49,7 +49,8 @@ const RegularField = (props) => {
         onBlur={() => checkInvalid()}
         onFocus={() => setInvalid(0)}
         onChange={(e) => {
-          props.onChange(e);
+          props.onChange(e,props.i);
+          console.log(props.i)
           console.log(e.target.value);
           let is_invalid = checker.check(e.target.value);
           console.log(is_invalid);
