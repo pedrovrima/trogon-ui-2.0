@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import { createChecker, NameCreator } from "../functions";
+import { createChecker } from "../functions";
 
 const RegularField = (props) => {
 
@@ -27,6 +27,15 @@ const RegularField = (props) => {
       ? props.checkFunc(props.name, is_invalid)
       : null;
   }, []);
+
+  useEffect(()=>{
+    let is_invalid = checker.check(props.value);
+    console.log(is_invalid)
+    let checkInv = props.checkFunc
+      ? props.checkFunc(props.name, is_invalid)
+      : null;
+
+  },[props.value])
 
   const checkInvalid = () => {
     let is_invalid = checker.check(props.value);

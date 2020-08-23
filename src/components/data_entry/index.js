@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CaptureCotainer from "../capture_container";
-import EffortContainer from "../effort";
 import Row from "react-bootstrap/Row";
 import EffortEntry from "../effort";
+import {countCaptures} from "../functions"
 
-function addCourseAction(data) {
-  return { type: "CHANGE_STAGE", data: data };
-}
 
 function localStorageChecker(data) {
   return { type: "LOCAL_STORAGE_DATA", data: data };
@@ -15,10 +12,11 @@ function localStorageChecker(data) {
 
 export default function Data_Entry() {
   const dispatch = useDispatch();
-
-  let local_data = localStorage.getItem("entry_data");
+  let capture_data = useSelector((state) => state.enter_data.captures);
+    let local_data = localStorage.getItem("entry_data");
   let loaded = useSelector((state) => state.loaded);
   let effort_data = useSelector((state) => state.enter_data.effort);
+  let [capCount,setCapCount]=useState(countCaptures())
 
   useEffect(() => {
     const init_data = localStorage.getItem("registerData");
@@ -31,7 +29,13 @@ export default function Data_Entry() {
     }
   }, []);
 
-  let effort_stage = useSelector((state) => state.data_stage);
+
+
+
+  useEffect(() => {
+    setCapCount( countCaptures())
+
+  }, [capture_data]);
 
   let entry_stage = useSelector((state) => state.entry_stage);
 
@@ -84,10 +88,10 @@ export default function Data_Entry() {
 
           <div className="shadow col-sm-12 p-2 bg-white rounded">
             <h3>Sumário Capturas</h3>
-            <p>{`Sem Anilha: 0/${effort_data.summary.unbanded}`}</p>
-            <p>{`Recapturas: 0/${effort_data.summary.recapture}`}</p>
+            <p>{`Sem Anilha: ${capCount.u}/${effort_data.summary.unbanded}`}</p>
+            <p>{`Recapturas: ${capCount.r}/${effort_data.summary.recapture}`}</p>
 
-            <p>{`Novas: 0/${effort_data.summary.new}`}</p>
+            <p>{`Novas: ${capCount.n}/${effort_data.summary.new}`}</p>
             <button
               className="btn btn-primary"
               disabled={entry_stage === "capture"}

@@ -21,7 +21,7 @@ const INITIAL_STATE = {
       },
       eff_params: [],
       banders: [""],
-      summary: { new: NaN, recapture: NaN, unbanded: NaN },
+      summary: { new_bands: NaN, recapture: NaN, unbanded: NaN },
       notes: "",
     },
     captures: [],
@@ -64,6 +64,7 @@ function pre_store(state = INITIAL_STATE, action) {
       return state;
     case "CHANGE_STAGE":
       let new_stage;
+      console.log(action)
       action.data === 0
         ? (new_stage = action.data)
         : (new_stage = state.data_stage + action.data);

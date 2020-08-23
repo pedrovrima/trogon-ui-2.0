@@ -52,7 +52,6 @@ export default function CaptureEnd() {
     checkForm();
   }, [checkFields]);
 
-  let [extraVars, newVars] = useState([]);
 
   let addVariable = (name) => {
     if (!capture_values.extra_vars) {

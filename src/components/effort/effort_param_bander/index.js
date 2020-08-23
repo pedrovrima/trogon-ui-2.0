@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "../../input_field";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavigationButtons, NameCreator } from "../../functions";
+import {NameCreator} from "../../functions"
+import functions from "../functions"
+
+let NavigationButtons = functions.NavigationButtons
+
 
 function addCourseAction() {
   return { type: "CHANGE_STAGE", data: 1, key: "base" };
@@ -31,7 +35,6 @@ export default function Effort_Param_Bander() {
   }
 
   const handleSubmit = (event) => {
-    nextEvent();
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
     let newdata = JSON.stringify({ ...entered_data, effort });
     localStorage.setItem("entry_data", newdata);
@@ -39,6 +42,28 @@ export default function Effort_Param_Bander() {
     event.preventDefault();
   };
 
+  let [checkFields, setCheckFields] = useState({});
+
+  let thisCheck = (name, value) => {
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
+  };
+
+  let [invalidForm, setInvalidForm] = useState(false);
+
+  let checkForm = () => {
+    let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
+      return sum + Number(checkFields[key]);
+    }, 0);
+
+    let formInvalid = invalidSum > 0 ? true : false;
+    setInvalidForm(formInvalid);
+  };
+
+  useEffect(() => {
+    checkForm();
+  }, [checkFields]);
 
   useEffect(()=>{
     console.log(entered_effort_param)
@@ -87,6 +112,8 @@ export default function Effort_Param_Bander() {
                       user_options={banders.map((bnd) => bnd.code)}
                       value={bander}
                       title=""
+                      checkFunc={thisCheck}
+
                     ></TextField>
                   </Col>
                   <Col>
@@ -137,6 +164,7 @@ export default function Effort_Param_Bander() {
               <p>loading</p>
             ) : (
               effort_param.map((par, i) => {
+                console.log(par)
                 return (
                   <Row>
                     <Col md={4}>
@@ -162,11 +190,15 @@ export default function Effort_Param_Bander() {
                                   data: e.target.value,
                                 })
                               }
+                              name={par.name+time.effort_time_id}
                               type={par.type}
+                              key={par.name+time.effort_time_id}
                               protocol_options={par.eff_options}
                               unit={par.unit}
                               value={this_value()}
                               title=""
+                              checkFunc={thisCheck}
+
                             ></TextField>
                           </Col>
                         </>
@@ -178,7 +210,7 @@ export default function Effort_Param_Bander() {
             )}
           </Col>
         </Row>
-        <NavigationButtons handleSub={handleSubmit} />
+        <NavigationButtons handleSub={handleSubmit} invalidForm={invalidForm} key={invalidForm}  />
       </Form>
     </div >
   );

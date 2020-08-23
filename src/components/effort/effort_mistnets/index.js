@@ -7,15 +7,39 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavigationButtons } from "../../functions";
-import functions from "../functions"
 import mistnetFunctions from "./mistnet_functions"
+import functions from "../functions"
+
+let NavigationButtons = functions.NavigationButtons
 
 export default function Effort_Nets() {
   let effort = useSelector((state) => state.enter_data.effort);
   let mistnets = useSelector((state) => state.enter_data.effort.mistnets,[]);
   let initial_data = useSelector((state) => state.initial_data);
 
+
+  let [checkFields, setCheckFields] = useState({});
+
+  let thisCheck = (name, value) => {
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
+  };
+
+  let [invalidForm, setInvalidForm] = useState(false);
+
+  let checkForm = () => {
+    let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
+      return sum + Number(checkFields[key]);
+    }, 0);
+
+    let formInvalid = invalidSum > 0 ? true : false;
+    setInvalidForm(formInvalid);
+  };
+
+  useEffect(() => {
+    checkForm();
+  }, [checkFields]);
 
   const dispatch = useDispatch();
   
@@ -49,6 +73,8 @@ export default function Effort_Nets() {
                   onChange={(e) => mistnetFunctions.onChangeNetInfo(e, "total", mistnets,dispatch,netnums)}
                   name="total"
                   title="Total de Redes"
+                  checkFunc={thisCheck}
+
                 ></TextField>
               </div>
             </div >
@@ -61,6 +87,8 @@ export default function Effort_Nets() {
                   onChange={(e) => mistnetFunctions.onChangeNetInfo(e, "open", mistnets,dispatch)}
                   name="open"
                   title="Hora de Início"
+                  checkFunc={thisCheck}
+
                 ></TextField>
               </div>
             </div>
@@ -74,6 +102,8 @@ export default function Effort_Nets() {
                   upper_level="mistnets"
                   name="close"
                   title="Hora de Fim"
+                  checkFunc={thisCheck}
+
                 ></TextField>
               </div>
             </div>
@@ -122,6 +152,7 @@ export default function Effort_Nets() {
                             upper_level="mistnets"
                             name="close"
                             title=""
+                            
                           ></TextField>
                         </Col>
 
@@ -224,7 +255,7 @@ export default function Effort_Nets() {
             </Row>
           </Col>
         </div>
-        <NavigationButtons handleSub={(e)=>functions.handleSubmit(effort,e)} />
+        <NavigationButtons handleSub={(e)=>functions.handleSubmit(effort,e)}  invalidForm={invalidForm} key={invalidForm} />
       </Form>
     </Container>
   );

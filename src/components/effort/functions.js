@@ -1,3 +1,6 @@
+import React, {useState,useEffect} from "react"
+import {useDispatch, useSelector} from "react-redux"
+
 const stationOptions = (initial_data) => {
     let opts = initial_data.stations.map((station) => station.station_code);
     return opts;
@@ -33,4 +36,45 @@ const stationOptions = (initial_data) => {
     return station_data[0];
   };
 
-  module.exports={stationOptions,protocolOptions,onChangeEffort, handleSubmit, stationGetter}
+
+
+   const NavigationButtons= (props) =>{
+    const effort_stage = useSelector((state) => state.data_stage);
+    const dispatch = useDispatch();
+  
+    return (
+      <div className="contaienr">
+        <div className="row mb-3 mt-5">
+          <div className="col" md={{ span: 2, offset: 8 }}>
+            <button className="btn btn-primary"
+              onClick={() => {
+                console.log("-1")
+                dispatch({ type: "CHANGE_STAGE", data: -1 });
+              }}
+              disabled={effort_stage === 0}
+              type="button"
+            >
+              Anterior
+            </button>
+          </div>
+          <div className="col"  md={{ span: 2 }}>
+            <button className="btn btn-primary"
+              color="blue"
+              onClick={(e) => {
+                props.handleSub(e);
+                effort_stage < 3
+                  ? dispatch({ type: "CHANGE_STAGE", data: 1 })
+                  : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
+              }}
+                         disabled={props.invalidForm}
+
+              type="button"
+            >
+              {effort_stage < 3 ? "Próximo" : "Iniciar Capturas"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  export default  {stationOptions,protocolOptions,onChangeEffort, handleSubmit, stationGetter, NavigationButtons}

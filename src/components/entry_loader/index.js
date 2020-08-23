@@ -31,7 +31,8 @@ export default function EntryLoader(props){
                     <div className=" shadow col-sm-8 p-4 bg-white rounded">
 
     <h2>Bem vindo ao Trogon Data System</h2>
-        <button className="btn btn-primary" onClick={()=>(props.setStage("entry"))} disabled={!dataLoaded}>Entrar Dados</button>
+        <button className="btn btn-primary" onClick={()=>(props.setStage("entry"))} disabled={!dataLoaded}>Esforço</button>
+        <button className="btn btn-primary" title="em breve" onClick={()=>(props.setStage("entry"))} disabled={true}>Captura</button>
 
 </div>
     </>)

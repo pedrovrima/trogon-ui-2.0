@@ -11,62 +11,25 @@ import store from "../store";
 export function countCaptures() {
   let state = store.getState();
   let captures = state.enter_data.captures;
-  let count = captures.reduce((obj, capVal) => {
-    switch (capVal.capture_code) {
-      case "N":
-        obj.n++;
-        break;
-      case "R":
-        obj.r++;
-        break;
-      case "U":
-        obj.u++;
-        break;
-      default:
-
-    }
-  return obj},{n:0,r:0,u:0}
+  let count = captures.reduce(
+    (obj, capVal) => {
+      switch (capVal.capture_code) {
+        case "N":
+          obj.n++;
+          break;
+        case "R":
+          obj.r++;
+          break;
+        case "U":
+          obj.u++;
+          break;
+        default:
+      }
+      return obj;
+    },
+    { n: 0, r: 0, u: 0 }
   );
-  console.log(count)
-}
-
-export function NavigationButtons(handleSub = () => null) {
-  const effort_stage = useSelector((state) => state.data_stage);
-  const entry_stage = useSelector((state) => state.entry_stage);
-  const dispatch = useDispatch();
-
-  let invalidValue = useSelector((state) => state.enter_data.form_invalid);
-  return (
-    <Container>
-      <Row className="mb-3 mt-5">
-        <Col md={{ span: 2, offset: 8 }}>
-          <Button
-            onClick={() => {
-              dispatch({ type: "CHANGE_STAGE", data: -1 });
-            }}
-            disabled={effort_stage === 0}
-          >
-            Anterior
-          </Button>
-        </Col>
-        <Col md={{ span: 2 }}>
-          <Button
-            color="blue"
-            onClick={(e) => {
-              handleSub.handleSub(e);
-              effort_stage < 3
-                ? dispatch({ type: "CHANGE_STAGE", data: 1 })
-                : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
-            }}
-            // disabled={invalidValue}
-            type="button"
-          >
-            {effort_stage < 3 ? "Próximo" : "Iniciar Capturas"}
-          </Button>
-        </Col>
-      </Row>
-    </Container>
-  );
+  return count;
 }
 
 export function NameCreator(title = "", unit = null) {

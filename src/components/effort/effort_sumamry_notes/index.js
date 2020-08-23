@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "../../input_field";
 import Form from "react-bootstrap/Form";
@@ -7,9 +7,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputMask from "react-input-mask";
-import { NavigationButtons } from "../../functions";
+import functions from "../functions"
 
-export default function Effort_Base() {
+let NavigationButtons = functions.NavigationButtons
+
+export default function Summary_Notes() {
   const intNaN = (val) => (isNaN(val) ? 0 : val === null ? 0 : parseInt(val));
   const dispatch = useDispatch();
   function addCourseAction(data) {
@@ -18,6 +20,33 @@ export default function Effort_Base() {
   function nextEvent() {
     dispatch(addCourseAction(1));
   }
+
+
+
+  let [checkFields, setCheckFields] = useState({});
+
+  let thisCheck = (name, value) => {
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
+  };
+
+  let [invalidForm, setInvalidForm] = useState(false);
+
+  let checkForm = () => {
+    let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
+      return sum + Number(checkFields[key]);
+    }, 0);
+
+    let formInvalid = invalidSum > 0 ? true : false;
+    setInvalidForm(formInvalid);
+  };
+
+  useEffect(() => {
+    checkForm();
+  }, [checkFields]);
+
+
 
   let effort = useSelector((state) => state.enter_data.effort);
   let summary = useSelector((state) => state.enter_data.effort.summary);
@@ -50,7 +79,9 @@ export default function Effort_Base() {
                 upper_level="summary"
                 name="new"
                 value={summary.new}
-                title="Novos"
+                title="Novos" 
+                checkFunc={thisCheck}
+
                 onChange={(e)=>onChangeSummary(e,"new")}
               />
             </Row>
@@ -60,6 +91,8 @@ export default function Effort_Base() {
                 form="effort"
                 upper_level="summary"
                 name="recapture"
+                checkFunc={thisCheck}
+
                 value={summary.recapture}
                 title="Recaptura"
                 onChange={(e)=>onChangeSummary(e,"recapture")}
@@ -74,6 +107,8 @@ export default function Effort_Base() {
                 name="unbanded"
                 value={summary.unbanded}
                 title="Sem Anilha"
+                checkFunc={thisCheck}
+
                 onChange={(e)=>onChangeSummary(e,"unbanded")}
 
               ></TextField>
@@ -81,7 +116,7 @@ export default function Effort_Base() {
             <Row>
               <p>
                 Total:{" "}
-                {intNaN(summary.new) +
+                {intNaN(summary.new_bands) +
                   intNaN(summary.recapture) +
                   intNaN(summary.unbanded)}
               </p>
@@ -107,7 +142,7 @@ export default function Effort_Base() {
           </Col>
         </Row>
       </Container>
-      <NavigationButtons handleSub={handleSubmit} />
+      <NavigationButtons handleSub={handleSubmit} invalidForm={invalidForm} key={invalidForm} />
     </Form>
   );
 }

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createCapture, countCaptures } from "../functions";
+import { createCapture } from "../functions";
 import CaptureEntry from "../capture_entry";
 import CaptureNav from "../capture_navigation"
 
 
-export default function CaptureContainer(capture_data = null) {
+export default function CaptureContainer() {
   let dispatch = useDispatch();
-  capture_data = useSelector((state) => state.enter_data.captures);
+  let capture_data = useSelector((state) => state.enter_data.captures);
   let effort_values = useSelector((state) => state.enter_data.effort);
 
   let user_protocols = useSelector((state) => state.initial_data.protocols);
   let capture_variables = useSelector(
     (state) => state.initial_data.capture_variables
   );
+
 
   let this_protocol = effort_values.protocol;
 
@@ -29,8 +30,6 @@ export default function CaptureContainer(capture_data = null) {
       mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
   );
 
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   useEffect(() => {
     if (capture_data.length === 0) {
@@ -39,12 +38,6 @@ export default function CaptureContainer(capture_data = null) {
       dispatch({ type: "ADD_CAPTURE", data: capture_data });
     }
   }, []);
-
-  useEffect(() => {
-    console.log(capture_data);
-    countCaptures()
-    forceUpdate();
-  }, [capture_data]);
 
 
   return (
