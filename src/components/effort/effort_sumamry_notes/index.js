@@ -77,12 +77,12 @@ export default function Summary_Notes() {
                 type="cont"
                 form="effort"
                 upper_level="summary"
-                name="new"
-                value={summary.new}
+                name="new_bands"
+                value={summary.new_bands}
                 title="Novos" 
                 checkFunc={thisCheck}
 
-                onChange={(e)=>onChangeSummary(e,"new")}
+                onChange={(e)=>onChangeSummary(e,"new_bands")}
               />
             </Row>
             <Row>

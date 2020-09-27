@@ -92,12 +92,13 @@ export function createChecker(unit, type, user_options, new_options, options) {
     switch (unit) {
       case "percentage":
         return {
-          check: (value) =>
+          check: (value) =>{ 
+            return value==="0"?false:
             value === "NA"
               ? false
               : !Number(value)
               ? !Number(value)
-              : value > 100 || value < 0,
+              : value > 100 || value < 0},
           message: "Valores devem estar entre 0 e 100",
           props: {
             options: {
@@ -120,7 +121,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
 
       default:
         return {
-          check: (value) => (value === "NA" ? false : !Number(value)),
+          check: (value) => (value==="0"?false:value === "NA" ? false : !Number(value)),
           message: "Deve ser um número",
           props: {
             options: {

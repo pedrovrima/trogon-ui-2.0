@@ -86,11 +86,11 @@ export default function CaptureVals() {
     <>
       <form onSubmit={handleSubmit}>
         <div className="row">
-          {mandatory_variables.map((variable) => {
+          {mandatory_variables?mandatory_variables.map((variable) => {
             let this_value = () => {
               return this_capture_values.variables.filter((param) => {
                 return param.name === variable.name;
-              })[0].a_value;
+              })[0].a_value
             };
 
             console.log(this_value())
@@ -112,7 +112,7 @@ export default function CaptureVals() {
                 </div>
               </>
             );
-          })}
+          }):null}
         </div>
         <CaptureNavigationButtons invalidForm={invalidForm} key={invalidForm} />
       </form>

@@ -3,6 +3,7 @@ import EffortBase from "./effort_base";
 import EffortNets from "./effort_mistnets";
 import EffortParamBander from "./effort_param_bander";
 import EffortSummaryNotes from "./effort_sumamry_notes";
+import SubmittEffort from "./submit_effort";
 import { useSelector } from "react-redux";
 
 const EffortEntry = () => {
@@ -16,8 +17,10 @@ const EffortEntry = () => {
         <EffortNets></EffortNets>
       ) : effort_stage === 2 ? (
         <EffortParamBander></EffortParamBander>
-      ) : (
+      ) : effort_stage === 3 ? (
         <EffortSummaryNotes></EffortSummaryNotes>
+      ) : (
+        <SubmittEffort></SubmittEffort>
       )}
     </div>
   );

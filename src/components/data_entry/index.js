@@ -5,12 +5,11 @@ import Row from "react-bootstrap/Row";
 import EffortEntry from "../effort";
 import {countCaptures} from "../functions"
 
-
 function localStorageChecker(data) {
   return { type: "LOCAL_STORAGE_DATA", data: data };
 }
 
-export default function Data_Entry() {
+export default function Data_Entry(props) {
   const dispatch = useDispatch();
   let capture_data = useSelector((state) => state.enter_data.captures);
     let local_data = localStorage.getItem("entry_data");
@@ -37,21 +36,21 @@ export default function Data_Entry() {
 
   }, [capture_data]);
 
-  let entry_stage = useSelector((state) => state.entry_stage);
-
+const {entry_stage} = props
+console.log(entry_stage)
   return (
     <>
       <div className=" shadow col-sm-8 p-4 bg-white rounded">
         <Row className="mb-5 ml-2 w-100">
           <div>
-            <h1>{entry_stage === "effort" ? "Esforço" : "Captura"}</h1>
+            <h1>{entry_stage === "effort" || "submit_effort" ? "Esforço" : "Captura"}</h1>
           </div>
         </Row>
         <Row>
           <div className="col">
             {loaded === 0 ? (
               <p>Loading...</p>
-            ) : entry_stage === "effort" ? (
+            ) :entry_stage === "effort" ? (
               <EffortEntry></EffortEntry>
             ) : (
               <CaptureCotainer></CaptureCotainer>

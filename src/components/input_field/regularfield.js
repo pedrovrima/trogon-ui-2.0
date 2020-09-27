@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import { createChecker } from "../functions";
 
 const RegularField = (props) => {
-
+  console.log(props.extraonBlur)
     let new_options = [];
 
     if (props.protocol_options) {
@@ -47,6 +47,11 @@ const RegularField = (props) => {
     setInvalid(is_invalid);
   };
 
+  const onBlurfunc = ()=>{
+    checkInvalid();
+      if(props.extraonBlur)props.extraonBlur()
+        }
+
   return (
     <div>
       <Form.Control
@@ -55,7 +60,8 @@ const RegularField = (props) => {
         type={undefined}
 
         isInvalid={invalid}
-        onBlur={() => checkInvalid()}
+        onBlur={() => {onBlurfunc()
+        }}
         onFocus={() => setInvalid(0)}
         onChange={(e) => {
           props.onChange(e,props.i);

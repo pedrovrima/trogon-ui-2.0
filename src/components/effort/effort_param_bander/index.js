@@ -65,9 +65,6 @@ export default function Effort_Param_Bander() {
     checkForm();
   }, [checkFields]);
 
-  useEffect(()=>{
-    console.log(entered_effort_param)
-  },[entered_effort_param])
 
   useEffect(() => {
     if (entered_effort_param.length === 0) {
@@ -91,7 +88,7 @@ export default function Effort_Param_Bander() {
       <Form onSubmit={handleSubmit} className="h-100">
         <Row className="align-items-center">
           <Col className="border-right">
-            <h2>Anilhadores</h2>
+            <h2>Anilhadores (3 letras)</h2>
             {entered_banders.map(function (bander, i) {
               let bander_data = banders.filter(
                 (value) => value.code === bander
@@ -164,7 +161,6 @@ export default function Effort_Param_Bander() {
               <p>loading</p>
             ) : (
               effort_param.map((par, i) => {
-                console.log(par)
                 return (
                   <Row>
                     <Col md={4}>

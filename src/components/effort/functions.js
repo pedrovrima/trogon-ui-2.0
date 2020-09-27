@@ -64,13 +64,13 @@ const stationOptions = (initial_data) => {
                 props.handleSub(e);
                 effort_stage < 3
                   ? dispatch({ type: "CHANGE_STAGE", data: 1 })
-                  : dispatch({ type: "CHANGE_ENTRY", data: "capture" });
+                  : dispatch({ type: "CHANGE_ENTRY", data: "submit_effort" });
               }}
                          disabled={props.invalidForm}
 
               type="button"
             >
-              {effort_stage < 3 ? "Próximo" : "Iniciar Capturas"}
+              {effort_stage < 3 ? "Próximo" : "Enviar Dados"}
             </button>
           </div>
         </div>

@@ -29,13 +29,17 @@ const setLocalStorage = async function (key, value) {
     let lastUp = new Date(localStorage.getItem("lastUpdate"))
 
     let res = await axios.get("http://localhost:3332/updater", { params: { data: lastUp } })
+
     let newData = Object.keys(res.data).map((key) => {
+
         let data = res.data[key]
-        if (data !== null) {
+        console.log(!data)
+        if (data) {
             return (data )
         } else{return null}
     })
 
+    console.log(newData)
 
 
     const convertArrayToObject = (array, key) => {
@@ -48,7 +52,7 @@ const setLocalStorage = async function (key, value) {
                     ...item
                 });
             } else {
-                return (null)
+                return (obj)
             }
         }, initialValue);
     };
@@ -61,14 +65,17 @@ const setLocalStorage = async function (key, value) {
     );
 
 
+    const oldStore = JSON.parse(localStorage.getItem("registerData"))
+const finalStore = {...oldStore ,...newStore }
+
     if (newStore !== null) {
-        localStorage.setItem("registerData", JSON.stringify({ ...newStore }))
+        localStorage.setItem("registerData", JSON.stringify(finalStore))
         localStorage.setItem("lastUpdate", new Date())
-        // dispatch({ type: 'LOCAL_STORAGE_DATA', data: newStore })
+        // store.dispatch({ type: 'LOCAL_STORAGE_DATA', data: {...oldStore ,...newStore } })
     } else {
         console.log("all up to date")
     }
-    return(newStore)
+    return(finalStore)
 
 
 }

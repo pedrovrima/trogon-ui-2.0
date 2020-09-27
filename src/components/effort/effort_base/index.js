@@ -45,7 +45,7 @@ export default function Effort_Base() {
               type="date"
               value={effort.date}
               onChange={(e)=>functions.onChangeEffort(e,"date",effort,dispatch)}
-              title="Data"
+              title="Data (DD/MM/AAAA)"
               checkFunc={thisCheck}
               name="date"
 
