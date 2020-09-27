@@ -10,7 +10,7 @@ export default function CaptureInit() {
   console.log(capture_index);
   let capture_values = all_capture_values[capture_index];
   console.log(capture_index, capture_values);
-  let effort_values = useSelector((state) => state.enter_data.effort);
+  let effort_values = useSelector((state) => state.capture.effort);
   let effort_nets = effort_values.mistnets.nets.map((net) => net.net_number);
   let acc_code = useSelector((state) => state.initial_data.capture_variables);
   let band_sizes = useSelector((state) =>
@@ -19,19 +19,15 @@ export default function CaptureInit() {
 
   let [checkFields, setCheckFields] = useState({});
 
- 
   let thisCheck = (name, value) => {
-    
-    setCheckFields(preCheck=> {return{...preCheck,
-    [name]:value}});
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
   };
-
-
 
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
-
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -47,18 +43,18 @@ export default function CaptureInit() {
   let filter_band = (bandi) =>
     capture_values.capture_code === "R" ? bandi.used : !bandi.used;
 
-
-  let used_bands = all_capture_values.map(cap=>cap.band_number)
-  console.log(used_bands)
+  let used_bands = all_capture_values.map((cap) => cap.band_number);
+  console.log(used_bands);
 
   let band_options = useSelector((state) => state.initial_data.bands)
-    .filter((band) => band.size === capture_values.band_size )
+    .filter((band) => band.size === capture_values.band_size)
     .map(
       (band) =>
         band.bands
-          .filter(bandi=>
-                           filter_band(bandi) && used_bands.indexOf(bandi.band_number)<0
-            )
+          .filter(
+            (bandi) =>
+              filter_band(bandi) && used_bands.indexOf(bandi.band_number) < 0
+          )
           .map((bandi) => bandi.band_number)
           .sort((a, b) => a - b)[0]
     );
@@ -184,7 +180,6 @@ export default function CaptureInit() {
               name="net_number"
               title="Rede"
               checkFunc={thisCheck}
-
             ></TextField>
           </div>
         </div>
@@ -201,7 +196,6 @@ export default function CaptureInit() {
               name="capture_code"
               title="Código de Captura"
               checkFunc={thisCheck}
-
             ></TextField>
           </div>
 
@@ -216,7 +210,6 @@ export default function CaptureInit() {
               name="band_size"
               title="Tamanha da Anilha"
               checkFunc={thisCheck}
-
             ></TextField>
           </div>
 
@@ -232,7 +225,6 @@ export default function CaptureInit() {
               name="band_number"
               title="Número da Anilha"
               checkFunc={thisCheck}
-
             ></TextField>
           </div>
         </div>
@@ -240,8 +232,7 @@ export default function CaptureInit() {
         <div className="row align-items-center">
           <div className="col-6">
             <TextField
-                          checkFunc={thisCheck}
-
+              checkFunc={thisCheck}
               id="spp_name"
               title="Especie"
               type="spp_name"
