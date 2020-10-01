@@ -44,7 +44,7 @@ const SubmitEffort = () =>{
                     `Loading`
                 :submitted==="failed"?<p >Falhou. Entre em contato com o administrador. Os dados entrados estão armazenados no seu computador. </p>:<p>${submitted}            </p>}
         </div>
-<button className="btn btn-primary" disabled={submitted==="sending"} onClick={()=>{              dispatch({type:"NEW_EFFORT"})
+<button className="btn btn-primary" disabled={submitted==="Enviando"} onClick={()=>{              dispatch({type:"NEW_EFFORT"})
 ;dispatch({type:"CHANGE_ENTRY",data:"initial"});dispatch({type:"RESTART_EFFORT"})}} >Início</button>
 </>
     )

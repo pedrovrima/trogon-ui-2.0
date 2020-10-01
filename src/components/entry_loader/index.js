@@ -26,9 +26,12 @@ localSetter()
                     <div className=" shadow col-sm-8 p-4 bg-white rounded">
 
     <h2>Bem vindo ao Trogon Data System</h2>
-        <button className="btn btn-primary" onClick={()=>(dispatch({type:"CHANGE_ENTRY",data:"effort"}))} disabled={loading}>Esforço</button>
+    <div className="row">
+    <div className="col">
+        <button className="btn btn-primary mr-1" onClick={()=>(dispatch({type:"CHANGE_ENTRY",data:"effort"}))} disabled={loading}>Esforço</button>
         <button className="btn btn-primary" title="em breve" onClick={()=>(dispatch({type:"CHANGE_ENTRY",data:"capture"}))} disabled={loading}>Captura</button>
-
+        </div>
+        </div>
 </div>
     </>)
 
