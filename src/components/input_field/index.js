@@ -10,6 +10,7 @@ import RegularField from "./regularfield";
 import fieldFunctions from "./field_functions";
 
 export default function FieldGroup(props) {
+  const [invalid,setInvalid]=useState(false)
 
   const dispatch = useDispatch()
   const createTitle = (title, unit) => {
@@ -21,6 +22,16 @@ export default function FieldGroup(props) {
     );
   };
 
+  const onBlurF=(props)=>{
+    console.log(props.value)
+    setInvalid(props.value?props.value.length?!props.value[0]:!props.value:true)
+// if(props.checkFunc) props.checkFunc(props.name, invalid)
+    
+}
+  
+   
+
+  console.log(props.options)
   return (
     <Form.Group as={Col}>
       {createTitle(props.title, props.unit)}{" "}
@@ -40,9 +51,9 @@ export default function FieldGroup(props) {
           <Typeahead
             name={props.name}
             value={props.value}
-            // isInvalid={invalid}
-            // onBlur={checkInvalid}
-            // onFocus={() => setInvalid(0)}
+            isInvalid={invalid}
+            onBlur={()=>onBlurF(props)}
+            onFocus={() => setInvalid(false)}
             // {...checker.props}
             {...props}
             options={props.options ? props.options : ""}

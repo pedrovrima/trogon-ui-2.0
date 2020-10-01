@@ -9,6 +9,7 @@ let NavigationButtons = functions.NavigationButtons
 export default function Effort_Base() {
   const dispatch = useDispatch();
 
+
   let effort = useSelector((state) => state.enter_data.effort);
   let initial_data = useSelector((state) => state.initial_data);
 

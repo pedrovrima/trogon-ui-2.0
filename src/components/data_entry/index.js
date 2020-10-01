@@ -1,9 +1,9 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CaptureCotainer from "../capture_container";
 import Row from "react-bootstrap/Row";
 import EffortEntry from "../effort";
-import {countCaptures} from "../functions"
+import { countCaptures } from "../functions";
 
 function localStorageChecker(data) {
   return { type: "LOCAL_STORAGE_DATA", data: data };
@@ -12,53 +12,49 @@ function localStorageChecker(data) {
 export default function Data_Entry(props) {
   const dispatch = useDispatch();
   let capture_data = useSelector((state) => state.enter_data.captures);
-    let local_data = localStorage.getItem("entry_data");
+  let local_data = localStorage.getItem("entry_data");
   let loaded = useSelector((state) => state.loaded);
   let effort_data = useSelector((state) => state.enter_data.effort);
-  let [capCount,setCapCount]=useState(countCaptures())
+  let [capCount, setCapCount] = useState(countCaptures());
+
+  // useEffect(() => {
+  //   const init_data = localStorage.getItem("registerData");
+  //   dispatch({ type: "LOCAL_SETTER", data: JSON.parse(init_data) });
+
+  //   if (local_data !== null) {
+  //     dispatch(localStorageChecker(JSON.parse(local_data)));
+  //   } else {
+  //     dispatch({ type: "LOADER", data: 1 });
+  //   }
+  // }, []);
 
   useEffect(() => {
-    const init_data = localStorage.getItem("registerData");
-    dispatch({ type: "LOCAL_SETTER", data: JSON.parse(init_data) });
-
-    if (local_data !== null) {
-      dispatch(localStorageChecker(JSON.parse(local_data)));
-    } else {
-      dispatch({ type: "LOADER", data: 1 });
-    }
-  }, []);
-
-
-
-
-  useEffect(() => {
-    setCapCount( countCaptures())
-
+    setCapCount(countCaptures());
   }, [capture_data]);
 
-const {entry_stage} = props
-console.log(entry_stage)
+  const entry_stage = useSelector((state) => state.entry_stage);
+  console.log(entry_stage);
   return (
     <>
       <div className=" shadow col-sm-8 p-4 bg-white rounded">
         <Row className="mb-5 ml-2 w-100">
           <div>
-            <h1>{entry_stage === "effort" || "submit_effort" ? "Esforço" : "Captura"}</h1>
+            <h1>
+              {entry_stage === "effort" || entry_stage === "submit_effort"
+                ? "Esforço"
+                : "Captura"}
+            </h1>
           </div>
         </Row>
         <Row>
           <div className="col">
-            {loaded === 0 ? (
-              <p>Loading...</p>
-            ) :entry_stage === "effort" ? (
-              <EffortEntry></EffortEntry>
-            ) : (
-              <CaptureCotainer></CaptureCotainer>
+            {entry_stage === "effort" ? (<EffortEntry></EffortEntry>) : (
+            <CaptureCotainer></CaptureCotainer>
             )}
           </div>
         </Row>
       </div>
-      <div className="col-sm-4 h-75">
+      {/* <div className="col-sm-4 h-75">
         <div className="row align-items-center h-100 ml-2 ">
           <div className="shadow  col-sm-12 p-2 bg-white rounded">
             <h3>Sumário do esforço</h3>
@@ -103,8 +99,8 @@ console.log(entry_stage)
               Editar Captura
             </button>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   );
 }

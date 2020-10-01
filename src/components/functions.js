@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import validateDate from "validate-date";
 import TextField from "./input_field";
 import store from "../store";
+import axios from "axios";
 
 export function countCaptures() {
   let state = store.getState();
@@ -92,13 +93,15 @@ export function createChecker(unit, type, user_options, new_options, options) {
     switch (unit) {
       case "percentage":
         return {
-          check: (value) =>{ 
-            return value==="0"?false:
-            value === "NA"
+          check: (value) => {
+            return value === "0"
+              ? false
+              : value === "NA"
               ? false
               : !Number(value)
               ? !Number(value)
-              : value > 100 || value < 0},
+              : value > 100 || value < 0;
+          },
           message: "Valores devem estar entre 0 e 100",
           props: {
             options: {
@@ -121,7 +124,8 @@ export function createChecker(unit, type, user_options, new_options, options) {
 
       default:
         return {
-          check: (value) => (value==="0"?false:value === "NA" ? false : !Number(value)),
+          check: (value) =>
+            value === "0" ? false : value === "NA" ? false : !Number(value),
           message: "Deve ser um número",
           props: {
             options: {
@@ -133,7 +137,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
   };
 
   switch (type) {
-    case "val":
+    case "val": {
       return {
         check: (value) =>
           value === "NA" ? false : new_options[0].indexOf(value) < 0,
@@ -144,7 +148,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
           },
         },
       };
-
+    }
     case "date":
       return {
         check: () => null,
@@ -224,7 +228,6 @@ export function VarField(...props) {
 }
 
 export function CaptureNavigationButtons(props) {
-  useEffect(() => console.log(props), [props]);
   let capture_index = useSelector((state) => state.capture_index);
   let dispatch = useDispatch();
   let capture_data = useSelector((state) => state.enter_data.captures);
@@ -232,38 +235,19 @@ export function CaptureNavigationButtons(props) {
     dispatch({ type: "CHANGE_CAPTURE_INDEX", data: value });
   let effort_values = useSelector((state) => state.enter_data.effort);
 
-  let user_protocols = useSelector((state) => state.initial_data.protocols);
-  let capture_variables = useSelector(
-    (state) => state.initial_data.capture_variables
-  );
-  let this_protocol = effort_values.protocol;
-
-  let protocol_variables = user_protocols.filter(
-    (prot) => prot.protocol_code === this_protocol
-  )[0].vars;
-
-  let mandatory_variables_id = protocol_variables
-    .filter((vars) => vars.mandatory === 1)
-    .map((vars) => vars.capture_variable_id);
-  let mandatory_variables = capture_variables.filter(
-    (variable) =>
-      mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
-  );
-
   const capture_stage = useSelector((state) => state.capture_stage);
   const entry_stage = useSelector((state) => state.entry_stage);
-  let fake_capture_data = createCapture(mandatory_variables);
 
   const finishCapture = () => {
-    const entered_data = JSON.parse(localStorage.getItem("entry_data"));
-    let newdata = JSON.stringify({
-      ...entered_data,
-      captures: capture_data,
-    });
-    localStorage.setItem("entry_data", newdata);
+    const non_sub_data = JSON.parse(
+      localStorage.getItem("non_submitted_captures")
+    );
+    const old_data = non_sub_data ? non_sub_data : [];
+    let newdata = JSON.stringify([...old_data, ...capture_data]);
+    localStorage.setItem("non_submitted_captures", newdata);
 
-    dispatch({ type: "ADD_CAPTURE", data: fake_capture_data });
-    dispatch({ type: "CHANGE_CAPTURE_INDEX", data: "new" });
+    dispatch({ type: "ZERO_CAPTURE" });
+    // dispatch({ type: "CHANGE_CAPTURE_INDEX", data: "new" });
     dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 0 });
   };
 
@@ -284,14 +268,12 @@ export function CaptureNavigationButtons(props) {
           <Button
             color="blue"
             onClick={(e) => {
-              capture_stage < 2
-                ? dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 })
-                : finishCapture();
+              dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 1 });
             }}
             disabled={props.invalidForm}
             type="button"
           >
-            {capture_stage < 2 ? "Próximo" : "Nova captura"}
+            {capture_stage < 3 ? "Próximo" : "Enviar"}
           </Button>
         </Col>
       </Row>

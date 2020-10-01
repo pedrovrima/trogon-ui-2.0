@@ -23,12 +23,12 @@ export default function Effort_Param_Bander() {
   let effort_time = useSelector((state) => state.initial_data.effort_time);
   let effort_param = useSelector(
     (state) => state.initial_data.effort_variables
-  );
+  ).filter(par=>par.name!=="na_register")
+  ;;
 
   let entered_banders = useSelector((state) => state.enter_data.effort.banders);
   let entered_effort_param = useSelector(
-    (state) => state.enter_data.effort.eff_params
-  );
+    (state) => state.enter_data.effort.eff_params)
   const dispatch = useDispatch();
   function nextEvent() {
     dispatch(addCourseAction(1));
@@ -202,7 +202,7 @@ export default function Effort_Param_Bander() {
                     })}
                   </Row>
                 );
-              })
+             })
             )}
           </Col>
         </Row>

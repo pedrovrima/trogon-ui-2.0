@@ -9,7 +9,7 @@ export default function CaptureEnd() {
   let dispatch = useDispatch();
   let capture_index = useSelector((state) => state.capture_index);
   let all_capture_values = useSelector((state) => state.enter_data.captures);
-  let effort_values = useSelector((state) => state.enter_data.effort);
+  let effort_values = useSelector((state) => state.enter_data.capture_effort);
 
   let capture_values = all_capture_values[capture_index];
   let user_protocols = useSelector((state) => state.initial_data.protocols);
@@ -64,7 +64,7 @@ export default function CaptureEnd() {
       });
     }
     let new_cap = capture_values;
-    new_cap.extra_vars.push({ name: name, a_value: "as" });
+    new_cap.extra_vars.push({ name: name, a_value: [""] });
 
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
@@ -87,11 +87,11 @@ export default function CaptureEnd() {
     });
   };
 
-  const onChangeExtraVar = (e, name) => {
+  const onChangeExtraVar = (e, name,i) => {
     let new_cap = capture_values;
     let var_names = new_cap.extra_vars.map((variable) => variable.name);
     let var_index = var_names.indexOf(name);
-    new_cap.extra_vars[var_index].a_value = e.target.value;
+    new_cap.extra_vars[var_index].a_value[i] = e.target.value;
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
       data: new_cap,

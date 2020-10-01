@@ -20,7 +20,8 @@ function App() {
 
 
 
-  const [loading,setLoading]=useState(true)
+    const [loading,setLoading]=useState(true)
+  const [value,setValue]=useState("initial")
 
   useEffect(() => { 
     setLocalStorage()
@@ -37,24 +38,34 @@ function App() {
       
   }, []);
 
+  
+  store.subscribe(
+    ()=>{
+      const state=store.getState()
+      setValue(state.entry_stage)
 
-  let [stage, setStage] = useState("inital");
+      }
+  )
+
+  
+  
+
   return (
     <>
       <Provider store={store}>
         <NavBar />
         <div className="container-fluid container-all">
           <div className="row align-items-center ml-4 mr-4 h-100 justify-content-center">
-            {stage === "inital" ? (
-              <PreEnter disabled={loading} setStage={setStage}></PreEnter>
+            {value === "initial" ? (
+              <PreEnter loading={loading} ></PreEnter>
             ) : (
-              <DataEntry entry_stage={stage}/>
+              <DataEntry entry_stage={value}/>
             )}
           </div>
         </div>
       </Provider>
     </>
   );
-}
+            }
 
 export default App;

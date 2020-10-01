@@ -11,7 +11,7 @@ export default function CaptureVals() {
   let capture_values = useSelector((state) => state.enter_data.captures);
 
   let this_capture_values = capture_values[capture_index];
-  let effort_values = useSelector((state) => state.enter_data.effort);
+  let effort_values = useSelector((state) => state.enter_data.capture_effort);
   let user_protocols = useSelector((state) => state.initial_data.protocols);
   let capture_variables = useSelector(
     (state) => state.initial_data.capture_variables
@@ -64,7 +64,6 @@ export default function CaptureVals() {
 
 
 
-  useEffect(()=>console.log(checkFields),[checkFields])
 
   let [invalidForm, setInvalidForm] = useState(false);
 

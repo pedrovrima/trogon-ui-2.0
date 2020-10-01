@@ -62,9 +62,7 @@ const stationOptions = (initial_data) => {
               color="blue"
               onClick={(e) => {
                 props.handleSub(e);
-                effort_stage < 3
-                  ? dispatch({ type: "CHANGE_STAGE", data: 1 })
-                  : dispatch({ type: "CHANGE_ENTRY", data: "submit_effort" });
+                  dispatch({ type: "CHANGE_STAGE", data: 1 })
               }}
                          disabled={props.invalidForm}
 

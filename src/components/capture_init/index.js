@@ -10,12 +10,16 @@ export default function CaptureInit() {
   console.log(capture_index);
   let capture_values = all_capture_values[capture_index];
   console.log(capture_index, capture_values);
-  let effort_values = useSelector((state) => state.capture.effort);
-  let effort_nets = effort_values.mistnets.nets.map((net) => net.net_number);
+  let effort_values = useSelector((state) => state.enter_data.capture_effort);
+  let effort_nets =effort_values.nets.map((net) => net.net_number)
+  console.log(effort_values.nets[0].net_number,effort_nets)
   let acc_code = useSelector((state) => state.initial_data.capture_variables);
   let band_sizes = useSelector((state) =>
     state.initial_data.bands.map((string) => string.size).filter(onlyUnique)
   );
+  const banders = useSelector((state) =>
+  state.initial_data.banders.map((bander) =>bander.code)
+);
 
   let [checkFields, setCheckFields] = useState({});
 
@@ -51,13 +55,13 @@ export default function CaptureInit() {
     .map(
       (band) =>
         band.bands
-          .filter(
-            (bandi) =>
-              filter_band(bandi) && used_bands.indexOf(bandi.band_number) < 0
-          )
+          // .filter(
+          //   (bandi) =>
+          //     filter_band(bandi) && used_bands.indexOf(bandi.band_number) < 0
+          // )
           .map((bandi) => bandi.band_number)
-          .sort((a, b) => a - b)[0]
-    );
+          .sort((a, b) => a - b)
+    )[0];
 
   let capture_codes = acc_code
     .filter((value) => value.name === "band_code")[0]
@@ -158,7 +162,7 @@ export default function CaptureInit() {
           <div className="col-4">
             <TextField
               type="val"
-              user_options={effort_values.banders}
+              user_options={banders}
               onChange={(e) => onChangeCap(e, "bander")}
               value={capture_values.bander}
               form="captures"
@@ -224,7 +228,7 @@ export default function CaptureInit() {
               form="captures"
               name="band_number"
               title="Número da Anilha"
-              checkFunc={thisCheck}
+              // checkFunc={thisCheck}
             ></TextField>
           </div>
         </div>
@@ -232,6 +236,7 @@ export default function CaptureInit() {
         <div className="row align-items-center">
           <div className="col-6">
             <TextField
+            value={capture_values.spp_id}
               checkFunc={thisCheck}
               id="spp_name"
               title="Especie"

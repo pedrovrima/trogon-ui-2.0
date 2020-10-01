@@ -1,10 +1,10 @@
 import { createStore } from "redux";
 const INITIAL_STATE = {
-  entry_stage: "effort",
+  entry_stage: "initial",
   initial_data: {},
   loaded: 0,
   capture_index: 0,
-  capture_stage: 2,
+  capture_stage: 0,
   data_stage: 0,
   enter_data: {
     field_invalid: {},
@@ -21,9 +21,10 @@ const INITIAL_STATE = {
       },
       eff_params: [],
       banders: [""],
-      summary: { new_bands: NaN, recapture: NaN, unbanded: NaN },
+      summary: { new_bands: "", recapture: "", unbanded: "" },
       notes: "",
     },
+    capture_effort:{},
     captures: [],
   },
 };
@@ -34,6 +35,43 @@ function pre_store(state = INITIAL_STATE, action) {
   let banders = [];
 
   switch (action.type) {
+    case "ZERO_CAPTURE":
+      return {
+        ...state,
+        enter_data: {
+          ...state.enter_data,
+          captures: [],
+        },
+      };
+
+
+      case "NEW_EFFORT" :
+        return({...state,enter_data:{...state.enter_data,effort: {
+          date: "",
+          station: "",
+          protocol: "",
+          mistnets: {
+            total: "",
+            open: "",
+            close: "",
+            nets: [],
+          }      ,eff_params: [],
+          banders: [""],
+          summary: { new_bands: 0, recapture: 0, unbanded: 0 },
+          notes: "",
+        },}})
+      
+
+    case "SET_CAPTURE_EFF":
+      return {
+        ...state,
+        enter_data: {
+          ...state.enter_data,
+          capture_effort: action.data,
+        },
+      };
+
+
     case "UPDATE_CAPTURE_VALUE":
       let restArray =
         state.enter_data.captures.length > 1
@@ -60,8 +98,14 @@ function pre_store(state = INITIAL_STATE, action) {
       return state;
 
     case "ADD_CAPTURE":
-      new_state = state.enter_data.captures.push(action.data);
-      return state;
+      return {
+        ...state,
+        enter_data: {
+          ...state.enter_data,
+          captures: [action.data],
+        },
+      };
+
     case "CHANGE_STAGE":
       let new_stage;
       console.log(action)
@@ -70,6 +114,11 @@ function pre_store(state = INITIAL_STATE, action) {
         : (new_stage = state.data_stage + action.data);
       Object.assign(state, { data_stage: new_stage });
       return state;
+
+
+case "RESTART_EFFORT":
+
+return {...state,data_stage:0}
 
     case "CHANGE_CAPTURE_STAGE":
       let cap_stage;
@@ -94,6 +143,7 @@ function pre_store(state = INITIAL_STATE, action) {
     case "LOCAL_SETTER":
       console.log(action.data);
       return { ...state, initial_data: action.data };
+
     case "NET_NUM":
       nets = state.enter_data.effort.mistnets.nets;
       nets[action.i].net_number = action.data;

@@ -3,7 +3,6 @@ import Form from "react-bootstrap/Form";
 import { createChecker } from "../functions";
 
 const RegularField = (props) => {
-  console.log(props.extraonBlur)
     let new_options = [];
 
     if (props.protocol_options) {
