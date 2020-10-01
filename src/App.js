@@ -20,23 +20,8 @@ function App() {
 
 
 
-    const [loading,setLoading]=useState(true)
+    // const [loading,setLoading]=useState(true)
   const [value,setValue]=useState("initial")
-
-  useEffect(() => { 
-    setLocalStorage()
-      .then((data) => {
-        console.log(data);
-        if (data) {
-          store.dispatch({ type: "LOCAL_SETTER", data: { ...data } });
-        }
-        setLoading(false)
-        console.log("loade")
-      }
-      
-      )
-      
-  }, []);
 
   
   store.subscribe(
@@ -57,7 +42,7 @@ function App() {
         <div className="container-fluid container-all">
           <div className="row align-items-center ml-4 mr-4 h-100 justify-content-center">
             {value === "initial" ? (
-              <PreEnter loading={loading} ></PreEnter>
+              <PreEnter ></PreEnter>
             ) : (
               <DataEntry entry_stage={value}/>
             )}

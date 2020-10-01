@@ -7,21 +7,19 @@ import setLocalStorage from "../../controllers/localstore";
 export default function EntryLoader(props){
     const dispatch = useDispatch();
     
-const {loading} = props
-//     const localSetter = async()=>{
-//         const data=await setLocalStorage()
-//             if (data) {
-//               dispatch({ type: "LOCAL_SETTER", data: { ...data } });
-//             }
-//             setLoading(false);
+const [loading,setLoading] = useState(true)
+    const localSetter = async()=>{
+        const data=await setLocalStorage()
+            if (data) {
+              dispatch({ type: "LOCAL_SETTER", data: { ...data } });
+            }
+            setLoading(false);
           
-//     }
+    }
 
-//     useEffect(() => {
-//         console.log("here")
-// localSetter()
-//       console.log("end")
-//     },[]);
+    useEffect(() => {
+localSetter()
+    },[]);
   
     return(
     <>
