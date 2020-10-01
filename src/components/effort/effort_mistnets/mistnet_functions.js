@@ -38,4 +38,4 @@ let onChangeNetInfo = (e, type, mistnets,dispatch,netnums) => {
   }
 };
 
-module.exports = {  onChangeNetInfo };
+export default {  onChangeNetInfo };

@@ -10,6 +10,7 @@ import { getEffort } from "./checkCapEffort";
 const CapEff = () => {
   const [capEff, setCapEff] = useState({ date: "", station: "" });
   let initial_data = useSelector((state) => state.initial_data);
+  let dispatch = useDispatch()
   let [checkFields, setCheckFields] = useState({});
 
   let [invalidForm, setInvalidForm] = useState(false);
@@ -24,6 +25,11 @@ const CapEff = () => {
     setInvalidForm(formInvalid);
   };
 
+  useEffect(()=>{
+    dispatch({type: "SET_CAPTURE_EFF",
+    data: effortId})
+  },[effortId])
+
   useEffect(() => {
     checkForm();
   }, [checkFields]);
@@ -32,6 +38,7 @@ const CapEff = () => {
     let value = event.target.value;
     let newcapEff = { ...capEff, [key]: value };
     setCapEff(newcapEff);
+    
   };
 
   let thisCheck = (name, value) => {
@@ -58,7 +65,8 @@ const CapEff = () => {
                     getEffort(
                       capEff,
                       initial_data.effort,
-                      initial_data.stations
+                      initial_data.stations,
+                      initial_data.protocols
                     )
                   );
               }}
@@ -81,7 +89,8 @@ const CapEff = () => {
                     getEffort(
                       capEff,
                       initial_data.effort,
-                      initial_data.stations
+                      initial_data.stations,
+                      initial_data.protocols
                     )
                   );
               }}
