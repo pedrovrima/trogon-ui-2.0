@@ -11,7 +11,7 @@ const SubmitEffort = () =>{
  
     const subEffort= async()=>{
         try{
-        let resu = await axios.post("http://localhost:3332/effort", effortData)
+        let resu = await axios.post("http://trogon.oama.eco.br/effort", effortData)
         console.log(resu)
         // dispatch({type:"NEW_EFFORT"})
         if(resu.status===200){setSub("Dados salvos com sucesso")}

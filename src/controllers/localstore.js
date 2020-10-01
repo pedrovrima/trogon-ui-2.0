@@ -28,7 +28,7 @@ const setLocalStorage = async function (key, value) {
 
     let lastUp = new Date(localStorage.getItem("lastUpdate"))
 
-    let res = await axios.get("http://localhost:3332/updater", { params: { data: lastUp } })
+    let res = await axios.get("http://trogon.oama.eco.br/updater", { params: { data: lastUp } })
 
     let newData = Object.keys(res.data).map((key) => {
 
