@@ -101,7 +101,7 @@ export default function CaptureEnd() {
 
   const onChangeNote = (e) => {
     let new_cap = capture_values;
-    new_cap.note = e.target.value;
+    new_cap.notes = e.target.value;
     dispatch({
       type: "UPDATE_CAPTURE_VALUE",
       data: new_cap,
@@ -127,7 +127,7 @@ export default function CaptureEnd() {
   let age_criteria = getVariable(cap_variables, "age_criteria");
   let sex = getVariable(cap_variables, "sex");
   let sex_criteria = getVariable(cap_variables, "sex_criteria");
-  let notes_value = capture_values.note;
+  let notes_value = capture_values.notes;
   const handleSubmit = (event) => {
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
     let newdata = JSON.stringify({
@@ -206,7 +206,7 @@ export default function CaptureEnd() {
           <div className="col-6">
             <TextField
               value={notes_value}
-              type="note"
+              type="notes"
               onChange={(e) => onChangeNote(e)}
               title="Notas"
               as="textarea"

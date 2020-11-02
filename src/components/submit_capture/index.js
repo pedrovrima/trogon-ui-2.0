@@ -16,7 +16,7 @@ const SubmitCapture = () => {
   const dispatch = useDispatch();
   const subCapture = async () => {
     try {
-      let resu = await axios.post("http://trogon.oama.eco.br/capture", capFinal);
+      let resu = await axios.post("/capture", capFinal);
       if (resu.status === 200) {
         setSub("ok");
       }

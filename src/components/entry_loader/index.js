@@ -25,7 +25,7 @@ localSetter()
     <>
                     <div className=" shadow col-sm-8 p-4 bg-white rounded">
 
-    <h2>Bem vindo ao Trogon Data System</h2>
+    <h2>Bem vindo ao Trogon Data System 1.2</h2>
     <div className="row">
     <div className="col">
         <button className="btn btn-primary mr-1" onClick={()=>(dispatch({type:"CHANGE_ENTRY",data:"effort"}))} disabled={loading}>Esforço</button>

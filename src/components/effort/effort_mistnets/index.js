@@ -131,7 +131,7 @@ export default function Effort_Nets() {
                   className="mb-5"
                   style={{ overflowY: "scroll", maxHeight: "30vh" }}
                 >
-                  {mistnets.nets.slice(0, slicer).map((net, i) => {
+                  {mistnets.nets.sort().slice(0, slicer).map((net, i) => {
                     let color = i % 2 === 0 ? "" : "bg-light";
 
                     return (

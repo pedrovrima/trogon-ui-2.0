@@ -78,7 +78,7 @@ export function createCapture(protocol_variables) {
     band_size: "",
     band_number: "",
 
-    note: "",
+    notes: "",
     spp_id: "",
     variables: cap_vars,
   };
@@ -140,7 +140,7 @@ export function createChecker(unit, type, user_options, new_options, options) {
     case "val": {
       return {
         check: (value) =>
-          value === "NA" ? false : new_options[0].indexOf(value) < 0,
+          value === "NA" ? false: value==="U"? false : new_options[0].indexOf(value) < 0,
         message: "Valores permitidos:" + new_options,
         props: {
           options: {
