@@ -52,7 +52,6 @@ export default function CaptureEnd() {
     checkForm();
   }, [checkFields]);
 
-
   let addVariable = (name) => {
     if (!capture_values.extra_vars) {
       let new_cap = capture_values;
@@ -87,7 +86,7 @@ export default function CaptureEnd() {
     });
   };
 
-  const onChangeExtraVar = (e, name,i) => {
+  const onChangeExtraVar = (e, name, i) => {
     let new_cap = capture_values;
     let var_names = new_cap.extra_vars.map((variable) => variable.name);
     let var_index = var_names.indexOf(name);
@@ -127,6 +126,8 @@ export default function CaptureEnd() {
   let age_criteria = getVariable(cap_variables, "age_criteria");
   let sex = getVariable(cap_variables, "sex");
   let sex_criteria = getVariable(cap_variables, "sex_criteria");
+  let status = getVariable(cap_variables, "status");
+
   let notes_value = capture_values.notes;
   const handleSubmit = (event) => {
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));
@@ -212,6 +213,14 @@ export default function CaptureEnd() {
               as="textarea"
               rows="3"
             ></TextField>
+          </div>
+          <div className="col-6">
+            <VarField
+              variable={status}
+              value={this_value(status)}
+              onChangeFunc={onChangeCapVar}
+              checkFunc={thisCheck}
+            />
           </div>
 
           <div className="col-6">
