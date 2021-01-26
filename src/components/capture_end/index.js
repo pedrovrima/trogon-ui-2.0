@@ -127,7 +127,7 @@ export default function CaptureEnd() {
   let sex = getVariable(cap_variables, "sex");
   let sex_criteria = getVariable(cap_variables, "sex_criteria");
   let status = getVariable(cap_variables, "status");
-
+  console.log(  status);
   let notes_value = capture_values.notes;
   const handleSubmit = (event) => {
     const entered_data = JSON.parse(localStorage.getItem("entry_data"));

@@ -4,7 +4,7 @@ import { createChecker } from "../functions";
 
 const RegularField = (props) => {
     let new_options = [];
-
+  console.log(props.protocol_options,props.name,props.user_options)
     if (props.protocol_options) {
       new_options.push(props.protocol_options.map((opt) => opt.value_oama));
     } else if (props.user_options) {

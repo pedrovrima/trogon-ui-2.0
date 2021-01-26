@@ -46,7 +46,7 @@ export default function Effort_Nets() {
   const station_mistnets = functions.stationGetter(initial_data,effort.station).mistnets;
   const netnums = station_mistnets.map((net) => net.net_number);
 
-
+  console.log(station_mistnets,netnums,functions.stationGetter(initial_data,effort.station))
   
 
   let total = mistnets.total === "" ? 0 : parseInt(mistnets.total, 10);
@@ -138,7 +138,8 @@ export default function Effort_Nets() {
                       <Row className={color}>
                         <Col md={4}>
                           <TextField
-                            type="cont"
+                            type="val"
+                            user_options={netnums}
                             key={i}
                             form="effort"
                             onChange={(e) =>
@@ -150,7 +151,7 @@ export default function Effort_Nets() {
                             }
                             value={net.net_number}
                             upper_level="mistnets"
-                            name="close"
+                            name="net_number"
                             title=""
                             
                           ></TextField>

@@ -65,6 +65,7 @@ export function createCapture(protocol_variables) {
     { name: "age_criteria", a_value: [""] },
     { name: "sex", a_value: [""] },
     { name: "sex_criteria", a_value: [""] },
+    { name: "status", a_value: [""]}
   ];
 
   ageSex.map((avar) => cap_vars.push(avar));
