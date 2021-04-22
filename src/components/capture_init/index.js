@@ -21,6 +21,7 @@ export default function CaptureInit() {
   let [checkFields, setCheckFields] = useState({});
 
   let thisCheck = (name, value) => {
+    console.log(name,value)
     setCheckFields((preCheck) => {
       return { ...preCheck, [name]: value };
     });
@@ -29,6 +30,7 @@ export default function CaptureInit() {
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
+    console.log(checkFields)
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -94,7 +96,7 @@ const all_bands = useSelector((state) => state.initial_data.bands)
   });
 
   let [band_entered, setBandEntered] = useState([capture_values.band_number]);
-
+  
   const onChangeCap = (e, name) => {
     let new_cap = { ...capture_values, [name]: e.target.value };
 
@@ -229,7 +231,7 @@ const all_bands = useSelector((state) => state.initial_data.bands)
               form="captures"
               name="band_number"
               title="Número da Anilha"
-              // checkFunc={thisCheck}
+              checkFunc={thisCheck}
             ></TextField>
           </div>
         </div>

@@ -199,7 +199,9 @@ export function createChecker(unit, type, user_options, new_options, options) {
 
     case "band_number":
       return {
-        check: (value) => null,
+        check: (value) =>{ 
+          console.log(value)
+          return(value[0]==="")},
       };
     default:
       return {

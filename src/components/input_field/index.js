@@ -23,8 +23,20 @@ export default function FieldGroup(props) {
   };
 
   const onBlurF=(props)=>{
-    console.log(props.value)
-    setInvalid(props.value?props.value.length?!props.value[0]:!props.value:true)
+    console.log(props.value.length)
+    if(props.type==="band_number"){
+      console.log(props.value)
+      const is_invalid = props.value[0]==="" || props.value.length===0
+      setInvalid(is_invalid)
+      props.checkFunc(props.name,is_invalid)
+      
+    }else{
+      const is_invalid = (props.value?props.value.length?!props.value[0]:!props.value:true)
+
+    setInvalid(is_invalid)
+    props.checkFunc(props.name,is_invalid)
+    }
+    
 // if(props.checkFunc) props.checkFunc(props.name, invalid)
     
 }
