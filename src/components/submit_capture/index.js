@@ -27,10 +27,13 @@ const SubmitCapture = () => {
       console.log(e.response.status);
       if (e.response.status === 409) {
         setSub("Dado já existe");
-      } else {
-        setSub("ERRO");
-      }
-
+      } 
+      if (e.response.status === 400) {
+        setSub("Erro de conexão");
+      } 
+      if (e.response.status === 503) {
+        setSub("Erro nos dados");
+      } 
       const non_sub_data = JSON.parse(
         localStorage.getItem("non_submitted_captures")
       );
@@ -52,11 +55,7 @@ const SubmitCapture = () => {
   return (
     <>
       <div>
-        {submitted === "sending"
-          ? `Loading`
-          : submitted === "failed"
-          ? "falhou"
-          : submitted}
+        {submitted}
       </div>
       <button
       disabled={submitted==="sending"}
@@ -75,8 +74,22 @@ const SubmitCapture = () => {
           dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 0 });
         }}
       >
-        Nova Capture
+        Nova Captura
       </button>
+
+
+      {/* <button
+            disabled={submitted==="sending"}
+
+        className="btn btn-primary"
+        onClick={() => {
+          dispatch({ type: "ZERO_CAPTURE" });
+          dispatch({ type: "CHANGE_CAPTURE_STAGE", data: 0 });
+        }}
+      >
+        Nova Captura - Mesmo Esforço
+      </button> */}
+
     </>
   );
 };
