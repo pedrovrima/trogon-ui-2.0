@@ -10,7 +10,7 @@ import { getEffort } from "./checkCapEffort";
 const CapEff = () => {
   const [capEff, setCapEff] = useState({ date: "", station: "" });
   let initial_data = useSelector((state) => state.initial_data);
-  let dispatch = useDispatch()
+  let dispatch = useDispatch();
   let [checkFields, setCheckFields] = useState({});
 
   let [invalidForm, setInvalidForm] = useState(false);
@@ -25,20 +25,18 @@ const CapEff = () => {
     setInvalidForm(formInvalid);
   };
 
-  useEffect(()=>{
-    dispatch({type: "SET_CAPTURE_EFF",
-    data: effortId})
-  },[effortId])
+  useEffect(() => {
+    dispatch({ type: "SET_CAPTURE_EFF", data: effortId });
+  }, [dispatch, effortId]);
 
   useEffect(() => {
     checkForm();
-  }, [checkFields]);
+  }, [checkFields, checkForm]);
 
   const changeCapEff = (event, key) => {
     let value = event.target.value;
     let newcapEff = { ...capEff, [key]: value };
     setCapEff(newcapEff);
-    
   };
 
   let thisCheck = (name, value) => {
@@ -83,6 +81,30 @@ const CapEff = () => {
               title="Estação"
               checkFunc={thisCheck}
               name="station"
+              extraonBlur={() => {
+                if (!invalidForm)
+                  setEffortId(
+                    getEffort(
+                      capEff,
+                      initial_data.effort,
+                      initial_data.stations,
+                      initial_data.protocols
+                    )
+                  );
+              }}
+            ></TextField>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-auto">
+            <TextField
+              type="val"
+              value={capEff.protocol}
+              onChange={(e) => changeCapEff(e, "protocol")}
+              user_options={functions.protocolOptions(initial_data)}
+              title="Protocolo"
+              checkFunc={thisCheck}
+              name="protocol"
               extraonBlur={() => {
                 if (!invalidForm)
                   setEffortId(

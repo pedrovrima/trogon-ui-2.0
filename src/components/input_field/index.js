@@ -10,9 +10,9 @@ import RegularField from "./regularfield";
 import fieldFunctions from "./field_functions";
 
 export default function FieldGroup(props) {
-  const [invalid,setInvalid]=useState(false)
+  const [invalid, setInvalid] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const createTitle = (title, unit) => {
     let newT = NameCreator(title, unit);
     return (
@@ -22,33 +22,39 @@ export default function FieldGroup(props) {
     );
   };
 
-  const onBlurF=(props)=>{
-    console.log(props.value.length)
-    if(props.type==="band_number"){
-      console.log(props.value)
-      const is_invalid = props.value[0]==="" || props.value.length===0
-      setInvalid(is_invalid)
-      props.checkFunc(props.name,is_invalid)
-      
-    }else{
-      const is_invalid = (props.value?props.value.length?!props.value[0]:!props.value:true)
+  const onBlurF = (props) => {
+    if (props.type === "band_number") {
+      const is_invalid = props.value[0] === "" || props.value.length === 0;
+      setInvalid(is_invalid);
+      props.checkFunc(props.name, is_invalid);
+    } else {
+      const is_invalid = props.value
+        ? props.value.length
+          ? !props.value[0]
+          : !props.value
+        : true;
 
-    setInvalid(is_invalid)
-    props.checkFunc(props.name,is_invalid)
+      setInvalid(is_invalid);
+      props.checkFunc(props.name, is_invalid);
     }
-    
-// if(props.checkFunc) props.checkFunc(props.name, invalid)
-    
-}
-  
-   
 
-  console.log(props.options)
+    // if(props.checkFunc) props.checkFunc(props.name, invalid)
+  };
+
   return (
     <Form.Group as={Col}>
       {createTitle(props.title, props.unit)}{" "}
       {props.duplicable ? (
-        <div onClick={() => fieldFunctions.addField(props.name? props.name:props.variable.name, dispatch)}>+</div>
+        <div
+          onClick={() =>
+            fieldFunctions.addField(
+              props.name ? props.name : props.variable.name,
+              dispatch
+            )
+          }
+        >
+          +
+        </div>
       ) : null}
       <Row>
         {["spp_name", "band_number"].indexOf(props.type) < 0 ? (
@@ -64,7 +70,7 @@ export default function FieldGroup(props) {
             name={props.name}
             value={props.value}
             isInvalid={invalid}
-            onBlur={()=>onBlurF(props)}
+            onBlur={() => onBlurF(props)}
             onFocus={() => setInvalid(false)}
             // {...checker.props}
             {...props}

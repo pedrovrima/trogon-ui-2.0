@@ -1,21 +1,24 @@
-const getDate = (date,split) => {
+const getDate = (date, split) => {
   let parts = date.split(split);
   let ndate = Date.UTC(parts[2], parts[1] - 1, parts[0]);
   return ndate;
 };
 
-const getDateEff = (date,split) => {
+const getDateEff = (date, split) => {
   let parts = date.split(split);
-  let ndate = (Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  let ndate = Date.UTC(parts[0], parts[1] - 1, parts[2]);
   return ndate;
 };
 
 export const getEffort = (datum, efforts, stations, protocols) => {
+  console.log(datum);
   const filEff = efforts.filter((eff) => {
-    const eff_date = getDateEff(eff.date_effort.split("T")[0],"-")
+    const eff_date = getDateEff(eff.date_effort.split("T")[0], "-");
     return (
       datum.station === getStationCode(stations, eff.station_id) &&
-      (getDate(datum.date,"/")) === (eff_date))
+      getDate(datum.date, "/") === eff_date &&
+      datum.protocol === getProtocol(protocols, eff.protocol_id)
+    );
   });
 
   const thisEffort = filEff.length

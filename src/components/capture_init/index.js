@@ -9,19 +9,18 @@ export default function CaptureInit() {
   let all_capture_values = useSelector((state) => state.enter_data.captures);
   let capture_values = all_capture_values[capture_index];
   let effort_values = useSelector((state) => state.enter_data.capture_effort);
-  let effort_nets =effort_values.nets.map((net) => net.net_number)
+  let effort_nets = effort_values.nets.map((net) => net.net_number);
   let acc_code = useSelector((state) => state.initial_data.capture_variables);
   let band_sizes = useSelector((state) =>
     state.initial_data.bands.map((string) => string.size).filter(onlyUnique)
   );
   const banders = useSelector((state) =>
-  state.initial_data.banders.map((bander) =>bander.code)
-);
+    state.initial_data.banders.map((bander) => bander.code)
+  );
 
   let [checkFields, setCheckFields] = useState({});
 
   let thisCheck = (name, value) => {
-    console.log(name,value)
     setCheckFields((preCheck) => {
       return { ...preCheck, [name]: value };
     });
@@ -30,7 +29,6 @@ export default function CaptureInit() {
   let [invalidForm, setInvalidForm] = useState(false);
 
   let checkForm = () => {
-    console.log(checkFields)
     let invalidSum = Object.keys(checkFields).reduce((sum, key) => {
       return sum + Number(checkFields[key]);
     }, 0);
@@ -41,31 +39,30 @@ export default function CaptureInit() {
 
   useEffect(() => {
     checkForm();
-  }, [checkFields]);
+  }, [checkFields, checkForm]);
 
   let filter_band = (bandi) =>
     capture_values.capture_code === "R" ? bandi.used : !bandi.used;
 
   let used_bands = all_capture_values.map((cap) => cap.band_number);
 
-const all_bands = useSelector((state) => state.initial_data.bands)
+  const all_bands = useSelector((state) => state.initial_data.bands);
   let pre_band_options = all_bands
     .filter((band) => band.size === capture_values.band_size)
-    .map(
-      (band) =>
-        band.bands
-          // .filter(
-          //   (bandi) =>
-          //     filter_band(bandi) && used_bands.indexOf(bandi.band_number) < 0
-          // )
-          .map((bandi) => bandi.band_number)
-          .sort((a, b) => a - b)
+    .map((band) =>
+      band.bands
+        // .filter(
+        //   (bandi) =>
+        //     filter_band(bandi) && used_bands.indexOf(bandi.band_number) < 0
+        // )
+        .map((bandi) => bandi.band_number)
+        .sort((a, b) => a - b)
     );
 
-    const band_options = pre_band_options.reduce((cont,val)=>
-      [...cont,...val],[]
-    )
-    console.log(pre_band_options)
+  const band_options = pre_band_options.reduce(
+    (cont, val) => [...cont, ...val],
+    []
+  );
   let capture_codes = acc_code
     .filter((value) => value.name === "band_code")[0]
     .options.map((vals) => vals.value_oama);
@@ -96,7 +93,7 @@ const all_bands = useSelector((state) => state.initial_data.bands)
   });
 
   let [band_entered, setBandEntered] = useState([capture_values.band_number]);
-  
+
   const onChangeCap = (e, name) => {
     let new_cap = { ...capture_values, [name]: e.target.value };
 
@@ -239,7 +236,7 @@ const all_bands = useSelector((state) => state.initial_data.bands)
         <div className="row align-items-center">
           <div className="col-6">
             <TextField
-            value={capture_values.spp_id}
+              value={capture_values.spp_id}
               checkFunc={thisCheck}
               id="spp_name"
               title="Especie"
