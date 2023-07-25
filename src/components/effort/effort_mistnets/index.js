@@ -7,16 +7,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import mistnetFunctions from "./mistnet_functions"
-import functions from "../functions"
+import mistnetFunctions from "./mistnet_functions";
+import functions from "../functions";
 
-let NavigationButtons = functions.NavigationButtons
+let NavigationButtons = functions.NavigationButtons;
 
 export default function Effort_Nets() {
   let effort = useSelector((state) => state.enter_data.effort);
-  let mistnets = useSelector((state) => state.enter_data.effort.mistnets,[]);
+  let mistnets = useSelector((state) => state.enter_data.effort.mistnets, []);
   let initial_data = useSelector((state) => state.initial_data);
-
 
   let [checkFields, setCheckFields] = useState({});
 
@@ -39,15 +38,20 @@ export default function Effort_Nets() {
 
   useEffect(() => {
     checkForm();
-  }, [checkFields]);
+  }, [checkFields, checkForm]);
 
   const dispatch = useDispatch();
-  
-  const station_mistnets = functions.stationGetter(initial_data,effort.station).mistnets;
+
+  const station_mistnets = functions
+    .stationGetter(initial_data, effort.station)
+    .mistnets.filter((net) => net.net_number !== "NA");
   const netnums = station_mistnets.map((net) => net.net_number);
 
-  console.log(station_mistnets,netnums,functions.stationGetter(initial_data,effort.station))
-  
+  console.log(
+    station_mistnets,
+    netnums,
+    functions.stationGetter(initial_data, effort.station)
+  );
 
   let total = mistnets.total === "" ? 0 : parseInt(mistnets.total, 10);
 
@@ -60,8 +64,8 @@ export default function Effort_Nets() {
 
   return (
     <Container>
-      <Form >
-        <div  className="align-items-center row">
+      <Form>
+        <div className="align-items-center row">
           <div className=" col-4 border-right">
             <div className="row">
               <div className="col-auto">
@@ -70,25 +74,38 @@ export default function Effort_Nets() {
                   unit="nets"
                   user_options={netnums.length}
                   value={mistnets.total}
-                  onChange={(e) => mistnetFunctions.onChangeNetInfo(e, "total", mistnets,dispatch,netnums)}
+                  onChange={(e) =>
+                    mistnetFunctions.onChangeNetInfo(
+                      e,
+                      "total",
+                      mistnets,
+                      dispatch,
+                      netnums
+                    )
+                  }
                   name="total"
                   title="Total de Redes"
                   checkFunc={thisCheck}
-
                 ></TextField>
               </div>
-            </div >
+            </div>
 
             <div className="row">
               <div className="col-auto">
                 <TextField
                   type="time"
                   value={mistnets.open}
-                  onChange={(e) => mistnetFunctions.onChangeNetInfo(e, "open", mistnets,dispatch)}
+                  onChange={(e) =>
+                    mistnetFunctions.onChangeNetInfo(
+                      e,
+                      "open",
+                      mistnets,
+                      dispatch
+                    )
+                  }
                   name="open"
                   title="Hora de Início"
                   checkFunc={thisCheck}
-
                 ></TextField>
               </div>
             </div>
@@ -97,13 +114,19 @@ export default function Effort_Nets() {
                 <TextField
                   type="time"
                   value={mistnets.close}
-                  onChange={(e) => mistnetFunctions.onChangeNetInfo(e, "close", mistnets,dispatch,)}
+                  onChange={(e) =>
+                    mistnetFunctions.onChangeNetInfo(
+                      e,
+                      "close",
+                      mistnets,
+                      dispatch
+                    )
+                  }
                   form="effort"
                   upper_level="mistnets"
                   name="close"
                   title="Hora de Fim"
                   checkFunc={thisCheck}
-
                 ></TextField>
               </div>
             </div>
@@ -131,132 +154,138 @@ export default function Effort_Nets() {
                   className="mb-5"
                   style={{ overflowY: "scroll", maxHeight: "30vh" }}
                 >
-                  {mistnets.nets.sort().slice(0, slicer).map((net, i) => {
-                    let color = i % 2 === 0 ? "" : "bg-light";
+                  {mistnets.nets
+                    .sort()
+                    .slice(0, slicer)
+                    .map((net, i) => {
+                      let color = i % 2 === 0 ? "" : "bg-light";
 
-                    return (
-                      <Row className={color}>
-                        <Col md={4}>
-                          <TextField
-                            type="val"
-                            user_options={netnums}
-                            key={i}
-                            form="effort"
-                            onChange={(e) =>
-                              dispatch({
-                                type: "NET_NUM",
-                                data: e.target.value,
-                                i: i,
-                              })
-                            }
-                            value={net.net_number}
-                            upper_level="mistnets"
-                            name="net_number"
-                            title=""
-                            
-                          ></TextField>
-                        </Col>
+                      return (
+                        <Row className={color}>
+                          <Col md={4}>
+                            <TextField
+                              type="val"
+                              user_options={netnums}
+                              key={i}
+                              form="effort"
+                              onChange={(e) =>
+                                dispatch({
+                                  type: "NET_NUM",
+                                  data: e.target.value,
+                                  i: i,
+                                })
+                              }
+                              value={net.net_number}
+                              upper_level="mistnets"
+                              name="net_number"
+                              title=""
+                            ></TextField>
+                          </Col>
 
-                        <Col md={8}>
-                          {net.oc.map((occ, o) => {
-                            return (
-                              <Row className="align-items-center">
-                                <Col>
-                                  <TextField
-                                    type="time"
-                                    key={"open" + i + o}
-                                    form="effort"
-                                    onChange={(e) =>
-                                      dispatch({
-                                        type: "NET_TIME",
-                                        data: e.target.value,
-                                        i: i,
-                                        o: o,
-                                        oc: "open",
-                                      })
-                                    }
-                                    value={net.oc[o].open}
-                                    upper_level="mistnets"
-                                    name="open"
-                                    title=""
-                                  ></TextField>
-                                </Col>
-                                <Col>
-                                  <TextField
-                                    type="time"
-                                    key={"close" + i + o}
-                                    form="effort"
-                                    onChange={(e) =>
-                                      dispatch({
-                                        type: "NET_TIME",
-                                        data: e.target.value,
-                                        i: i,
-                                        o: o,
-                                        oc: "close",
-                                      })
-                                    }
-                                    value={net.oc[o].close}
-                                    upper_level="mistnets"
-                                    name="close"
-                                    arr={1}
-                                    title=""
-                                  ></TextField>
-                                </Col>
-                                <Col md={2} className={"align-self-center"}>
-                                  {o == net.oc.length - 1 ? (
-                                    <>
-                                      <Row>
-                                        <Col>
-                                          <FontAwesomeIcon
-                                            onClick={() =>
-                                              dispatch({
-                                                type: "ADD_HOUR",
-                                                o: o,
-                                                i: i,
-                                              })
-                                            }
-                                            icon="plus-square"
-                                            color="green"
-                                          />
-                                        </Col>
-                                      </Row>
-                                      {net.oc.length > 1 ? (
+                          <Col md={8}>
+                            {net.oc.map((occ, o) => {
+                              return (
+                                <Row className="align-items-center">
+                                  <Col>
+                                    <TextField
+                                      type="time"
+                                      key={"open" + i + o}
+                                      form="effort"
+                                      onChange={(e) =>
+                                        dispatch({
+                                          type: "NET_TIME",
+                                          data: e.target.value,
+                                          i: i,
+                                          o: o,
+                                          oc: "open",
+                                        })
+                                      }
+                                      value={net.oc[o].open}
+                                      upper_level="mistnets"
+                                      name="open"
+                                      title=""
+                                    ></TextField>
+                                  </Col>
+                                  <Col>
+                                    <TextField
+                                      type="time"
+                                      key={"close" + i + o}
+                                      form="effort"
+                                      onChange={(e) =>
+                                        dispatch({
+                                          type: "NET_TIME",
+                                          data: e.target.value,
+                                          i: i,
+                                          o: o,
+                                          oc: "close",
+                                        })
+                                      }
+                                      value={net.oc[o].close}
+                                      upper_level="mistnets"
+                                      name="close"
+                                      arr={1}
+                                      title=""
+                                    ></TextField>
+                                  </Col>
+                                  <Col md={2} className={"align-self-center"}>
+                                    {o == net.oc.length - 1 ? (
+                                      <>
                                         <Row>
                                           <Col>
                                             <FontAwesomeIcon
                                               onClick={() =>
                                                 dispatch({
-                                                  type: "REMOVE_HOUR",
+                                                  type: "ADD_HOUR",
                                                   o: o,
                                                   i: i,
                                                 })
                                               }
-                                              icon="minus-square"
-                                              color="red"
+                                              icon="plus-square"
+                                              color="green"
                                             />
                                           </Col>
                                         </Row>
-                                      ) : (
-                                        ""
-                                      )}
-                                    </>
-                                  ) : (
-                                    <Row></Row>
-                                  )}
-                                </Col>
-                              </Row>
-                            );
-                          })}
-                        </Col>
-                      </Row>
-                    );
-                  })}
+                                        {net.oc.length > 1 ? (
+                                          <Row>
+                                            <Col>
+                                              <FontAwesomeIcon
+                                                onClick={() =>
+                                                  dispatch({
+                                                    type: "REMOVE_HOUR",
+                                                    o: o,
+                                                    i: i,
+                                                  })
+                                                }
+                                                icon="minus-square"
+                                                color="red"
+                                              />
+                                            </Col>
+                                          </Row>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </>
+                                    ) : (
+                                      <Row></Row>
+                                    )}
+                                  </Col>
+                                </Row>
+                              );
+                            })}
+                          </Col>
+                        </Row>
+                      );
+                    })}
                 </Container>
               </Col>
             </Row>
           </Col>
         </div>
-        <NavigationButtons handleSub={(e)=>functions.handleSubmit(effort,e)}  invalidForm={invalidForm} key={invalidForm} />
+        <NavigationButtons
+          handleSub={(e) => functions.handleSubmit(effort, e)}
+          invalidForm={invalidForm}
+          key={invalidForm}
+        />
       </Form>
     </Container>
   );
