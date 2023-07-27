@@ -45,7 +45,9 @@ export default function Effort_Nets() {
   const station_mistnets = functions
     .stationGetter(initial_data, effort.station)
     .mistnets.filter((net) => net.net_number !== "NA");
-  const netnums = station_mistnets.map((net) => net.net_number);
+  const netnums = station_mistnets
+    .map((net) => net.net_number)
+    .sort((a, b) => a - b);
 
   console.log(
     station_mistnets,
