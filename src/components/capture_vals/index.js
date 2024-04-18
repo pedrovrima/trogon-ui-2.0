@@ -1,16 +1,14 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../input_field";
-import {CaptureNavigationButtons} from "../functions"
+import { CaptureNavigationButtons } from "../functions";
 
 export default function CaptureVals() {
   let dispatch = useDispatch();
   let capture_index = useSelector((state) => state.capture_index);
   let all_capture_values = useSelector((state) => state.enter_data.captures);
 
-  let capture_values = useSelector((state) => state.enter_data.captures);
-
-  let this_capture_values = capture_values[capture_index];
+  let this_capture_values = all_capture_values[capture_index];
   let effort_values = useSelector((state) => state.enter_data.capture_effort);
   let user_protocols = useSelector((state) => state.initial_data.protocols);
   let capture_variables = useSelector(
@@ -24,14 +22,17 @@ export default function CaptureVals() {
   )[0].vars;
 
   let mandatory_variables_id = protocol_variables
-    .filter((vars) => vars.mandatory === 1)
+    .filter((vars) => vars.mandatory === true)
     .map((vars) => vars.capture_variable_id);
+
   let mandatory_variables = capture_variables.filter(
     (variable) =>
       mandatory_variables_id.indexOf(variable.capture_variable_id) > -1
   );
 
-  const onChangeCap = (e, name,i) => {
+  console.log(mandatory_variables);
+
+  const onChangeCap = (e, name, i) => {
     let new_cap = this_capture_values;
     let var_names = new_cap.variables.map((variable) => variable.name);
     let var_index = var_names.indexOf(name);
@@ -53,17 +54,13 @@ export default function CaptureVals() {
     event.preventDefault();
   };
 
-  
   let [checkFields, setCheckFields] = useState({});
- 
+
   let thisCheck = (name, value) => {
-    
-    setCheckFields(preCheck=> {return{...preCheck,
-    [name]:value}});
+    setCheckFields((preCheck) => {
+      return { ...preCheck, [name]: value };
+    });
   };
-
-
-
 
   let [invalidForm, setInvalidForm] = useState(false);
 
@@ -80,38 +77,38 @@ export default function CaptureVals() {
     checkForm();
   }, [checkFields]);
 
-
   return (
     <>
       <form onSubmit={handleSubmit}>
         <div className="row">
-          {mandatory_variables?mandatory_variables.map((variable) => {
-            let this_value = () => {
-              return this_capture_values.variables.filter((param) => {
-                return param.name === variable.name;
-              })[0].a_value
-            };
+          {mandatory_variables
+            ? mandatory_variables.map((variable) => {
+                let this_value = () => {
+                  return this_capture_values.variables.find((param) => {
+                    return param.name === variable.name;
+                  })?.a_value;
+                };
 
-            console.log(this_value())
-            return (
-              <>
-                <div className="col-3">
-                  <TextField
-
-                    type={variable.type}
-                    onChange={(e,i) => onChangeCap(e, variable.name,i)}
-                    value={this_value()}
-                    title={variable.portuguese_label}
-                    protocol_options={variable.options}
-                    unit={variable.unit}
-                    checkFunc={thisCheck}
-                    name={variable.name}
-                    duplicable={variable.duplicable}
-                  ></TextField>
-                </div>
-              </>
-            );
-          }):null}
+                console.log(this_value());
+                return (
+                  <>
+                    <div className="col-3">
+                      <TextField
+                        type={variable.type}
+                        onChange={(e, i) => onChangeCap(e, variable.name, i)}
+                        value={this_value()}
+                        title={variable.portuguese_label}
+                        protocol_options={variable.options}
+                        unit={variable.unit}
+                        checkFunc={thisCheck}
+                        name={variable.name}
+                        duplicable={variable.duplicable}
+                      ></TextField>
+                    </div>
+                  </>
+                );
+              })
+            : null}
         </div>
         <CaptureNavigationButtons invalidForm={invalidForm} key={invalidForm} />
       </form>

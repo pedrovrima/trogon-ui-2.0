@@ -1,15 +1,15 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import EffortBase from "./effort_base";
 import EffortNets from "./effort_mistnets";
 import EffortParamBander from "./effort_param_bander";
 import EffortSummaryNotes from "./effort_sumamry_notes";
 import SubmittEffort from "./submit_effort";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const EffortEntry = () => {
-const dispatch=useDispatch();
+  const dispatch = useDispatch();
   let effort_stage = useSelector((state) => state.data_stage);
-  
+
   return (
     <div>
       {effort_stage === 0 ? (
