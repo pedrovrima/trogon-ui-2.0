@@ -10,7 +10,7 @@ const SubmitCapture = () => {
 
   const capNetEff = capEff.nets.filter(
     (net) => net.net_number === capData.net_number
-  )[0].NET_EFFORT.net_eff_id;
+  )[0].net_effort.net_eff_id;
   console.log(capNetEff);
   const capFinal = { ...capData, net_eff_id: capNetEff };
   const dispatch = useDispatch();
